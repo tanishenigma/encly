@@ -26,7 +26,9 @@ const AppLayout = () => {
         <div className="absolute inset-0 opacity-[0.02] bg-repeat" />
       </div>
 
-      <Header />
+      <div className="relative z-50">
+        <Header />
+      </div>
 
       <main className="relative z-10 min-h-screen mx-auto container flex justify-center">
         <Outlet />
@@ -34,7 +36,7 @@ const AppLayout = () => {
         {/* Gravitational circles */}
         <div
           className="absolute circlePosition rounded-full -z-50 bg-pink-300 w-[90%] h-[200%] overflow-y-hidden opacity-1 shadow-accent shadow-2xl bottom-90 
-                     transition-transform duration-300 ease-out"
+                     transition-transform duration-300 ease-out pointer-events-none"
           style={{
             transform: `translate(${mousePos.x * 15}px, ${
               mousePos.y * 10
@@ -43,7 +45,7 @@ const AppLayout = () => {
 
         <div
           className="absolute circlePosition rounded-full -z-50 bg-pink-400 w-[110%] h-[200%] overflow-y-hidden opacity-1 bottom-60
-                     transition-transform duration-500 ease-out"
+                     transition-transform duration-500 ease-out pointer-events-none"
           style={{
             transform: `translate(${mousePos.x * -12}px, ${
               mousePos.y * 8
@@ -52,7 +54,7 @@ const AppLayout = () => {
 
         <div
           className="absolute circlePosition rounded-full -z-50 bg-pink-500 w-[130%] h-[200%] overflow-y-hidden opacity-1 bottom-35
-                     transition-transform duration-700 ease-out"
+                     transition-transform duration-700 ease-out pointer-events-none"
           style={{
             transform: `translate(${mousePos.x * 8}px, ${
               mousePos.y * -6
@@ -72,6 +74,16 @@ const AppLayout = () => {
         <p className="drop-shadow-sm">
           Made by <span className="font-bold">TanishEnigma</span> with 🖱️ & ⌨️
         </p>
+
+        {/* Footer circle with gravitational effect */}
+        <div
+          className="absolute circlePosition rounded-full -z-50 bg-fuchsia-700/10 w-300 h-300 overflow-y-hidden backdrop-blur-3xl top-15 right-90 blur-3xl
+                     transition-transform duration-400 ease-out pointer-events-none"
+          style={{
+            transform: `translate(${mousePos.x * -10}px, ${
+              mousePos.y * 12
+            }px) scale(${1 + mousePos.y * 0.04})`,
+          }}></div>
       </footer>
     </div>
   );
