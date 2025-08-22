@@ -2,6 +2,37 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@theme {
+  /* Define a custom animation variable */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+
+  /* Define the keyframes */
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  /* Similarly for the "accordion-up" animation */
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/* Apply the animation via Tailwind's utility */
+.some-element {
+  @apply animate-accordion-down;
+}
 @layer utilities {
   .btn {
     border-radius: 1rem;
@@ -108,8 +139,8 @@
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
   --shadow-sm: 0px 2px 4px 0px hsl(0 0% 0% / 0.1),
     0px 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow: 0px 2px 4px 0px hsl(0 0% 0% / 0.1),
-    0px 1px 2px -1px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 2px 4px 0px hsl(0 0% 0% / 0.1) 0px 1px 2px -1px hsl(0 0% 0% /
+        0.1);
   --shadow-md: 0px 2px 4px 0px hsl(0 0% 0% / 0.1),
     0px 2px 4px -1px hsl(0 0% 0% / 0.1);
   --shadow-lg: 0px 2px 4px 0px hsl(0 0% 0% / 0.1),
@@ -177,21 +208,6 @@
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
-  
-   extend: keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
 }
 
 body {

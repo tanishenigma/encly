@@ -1,22 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
+
 const AppLayout = () => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
-    <div>
-      {/* {Header} */}
+    <div className="relative min-h-screen overflow-x-hidden bg-black/70">
+      <div className="fixed inset-0 -z-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-700 animate-pulse  duration-[10s]" />
+
+        <div className="absolute inset-0 bg-gradient-to-br from-pink-950/60 via-transparent to-slate-900/80" />
+
+        <div className="absolute inset-0 opacity-[0.02] bg-repeat" />
+      </div>
+
       <Header />
-      <main className="min-h-screen mx-auto container flex justify-center ">
+
+      <main className="relative z-10 min-h-screen mx-auto container flex justify-center">
         <Outlet />
+
+        {/* Gravitational circles */}
+        <div
+          className="absolute circlePosition rounded-full -z-50 bg-pink-300 w-[90%] h-[200%] overflow-y-hidden opacity-1 shadow-accent shadow-2xl bottom-90 
+                     transition-transform duration-300 ease-out"
+          style={{
+            transform: `translate(${mousePos.x * 15}px, ${
+              mousePos.y * 10
+            }px) scale(${1 + mousePos.x * 0.05})`,
+          }}></div>
+
+        <div
+          className="absolute circlePosition rounded-full -z-50 bg-pink-400 w-[110%] h-[200%] overflow-y-hidden opacity-1 bottom-60
+                     transition-transform duration-500 ease-out"
+          style={{
+            transform: `translate(${mousePos.x * -12}px, ${
+              mousePos.y * 8
+            }px) scale(${1 + mousePos.y * 0.03}) rotate(${mousePos.x * 2}deg)`,
+          }}></div>
+
+        <div
+          className="absolute circlePosition rounded-full -z-50 bg-pink-500 w-[130%] h-[200%] overflow-y-hidden opacity-1 bottom-35
+                     transition-transform duration-700 ease-out"
+          style={{
+            transform: `translate(${mousePos.x * 8}px, ${
+              mousePos.y * -6
+            }px) scale(${1 + mousePos.x * 0.02}) rotate(${
+              mousePos.y * -1.5
+            }deg)`,
+          }}></div>
       </main>
 
-      {/* {Footer} */}
-      <footer className="text-center mt-10 p-10 text-slate-400">
-        <h1 className="text-4xl font-black mb-2 text-slate-50">Encly</h1>
-        <p>
+      <footer className="relative z-10 text-center mt-10 p-10 pt-60 text-slate-400 overflow-hidden">
+        <h1 className="text-4xl font-black mb-2 text-slate-50 tracking-wider drop-shadow-lg">
+          Encly
+        </h1>
+        <p className="drop-shadow-sm">
           Copyright © 2025 <span className="font-bold">Encly</span>
         </p>
-        <p>
+        <p className="drop-shadow-sm">
           Made by <span className="font-bold">TanishEnigma</span> with 🖱️ & ⌨️
         </p>
       </footer>

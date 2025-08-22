@@ -14,10 +14,13 @@ import { LinkIcon, LogOut } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
-  const user = true;
+  const user = false;
   return (
     <nav className="py-4 mx-15 flex justify-between items-center">
-      <p>Logo</p>
+      <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 cursor-pointer">
+        <LinkIcon className="w-10 h-10 p-2 absolute top-2 left-2 cursor-pointer " />
+      </div>
+
       {!user ? (
         <Button
           onClick={() => {
