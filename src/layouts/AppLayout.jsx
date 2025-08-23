@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import Header from "../components/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const AppLayout = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -17,7 +18,7 @@ const AppLayout = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-black/70">
+    <div className="relative min-h-screen overflow-x-hidden bg-black/50">
       <div className="fixed inset-0 -z-20">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-700 animate-pulse  duration-[10s]" />
 
@@ -29,8 +30,7 @@ const AppLayout = () => {
       <div className="relative z-50">
         <Header />
       </div>
-
-      <main className="relative z-10 min-h-screen mx-auto container flex justify-center">
+      <main className="relative z-50 min-h-screen mx-auto container flex justify-center">
         <Outlet />
 
         {/* Gravitational circles */}
@@ -63,8 +63,13 @@ const AppLayout = () => {
             }deg)`,
           }}></div>
       </main>
-
-      <footer className="relative z-10 text-center mt-10 p-10 pt-60 text-slate-400 overflow-hidden">
+      <footer className="flex flex-col justify-center items-center relative z-10 text-center mt-10 p-10 pt-60 text-slate-400 overflow-hidden">
+        <Link
+          to="https://github.com/tanishenigma"
+          target="blank"
+          className="bg-slate-400 h-6 w-6 rounded-full relative overflow-hidden hover:animate-bounce duration-1000 hover:scale-115">
+          <img src="public/github-icon.svg" className="w-7.5 h-7.5 absolute " />
+        </Link>
         <h1 className="text-4xl font-black mb-2 text-slate-50 tracking-wider drop-shadow-lg">
           Encly
         </h1>

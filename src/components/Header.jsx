@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button.tsx";
 import {
@@ -11,20 +11,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LinkIcon, LogOut } from "lucide-react";
+import { auth } from "../lib/firebase.js";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Header = () => {
   const navigate = useNavigate();
-  const user = false;
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
+      setUser(currentuser);
+    });
+    return () => unsubscribe();
+  }, []);
   return (
     <nav className="py-4 mx-15 flex justify-between items-center">
       <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 cursor-pointer">
-        <LinkIcon className="w-10 h-10 p-2 absolute top-2 left-2 cursor-pointer " />
+        <LinkIcon
+          onClick={() => {
+            navigate("/");
+          }}
+          className="w-10 h-10 p-2 absolute top-2 left-2 cursor-pointer "
+        />
       </div>
 
       {!user ? (
         <Button
           onClick={() => {
-            navigate("/auth");
+            navigate("/login");
           }}
           className="cursor-pointer">
           Login

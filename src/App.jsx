@@ -6,22 +6,33 @@ import LandingPage from "./pages/LandingPage";
 import LinkPage from "./pages/LinkPage";
 import Dashboard from "./pages/Dashboard";
 import Redirect from "./pages/RedirectLink";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import { Toaster } from "@/components/ui/sonner";
+import ResetPassword from "./pages/ResetPassword";
 
 const router = createBrowserRouter([
   {
-    path: "/",
     element: <AppLayout />,
     children: [
-      { path: "/landing", element: <LandingPage /> },
+      { path: "/", element: <LandingPage /> },
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/auth", element: <Auth /> },
       { path: "/link/:id", element: <LinkPage /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/login", element: <Login /> },
       { path: "/:id", element: <Redirect /> },
+      { path: "/reset", element: <ResetPassword /> },
     ],
   },
 ]);
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <Toaster />
+    </>
+  );
 }
 
 export default App;
