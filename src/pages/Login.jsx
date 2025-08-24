@@ -18,28 +18,59 @@ import {
 } from "firebase/auth";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
+import * as Yup from "yup";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
+      setErrors({});
+
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .email("Invalid Email")
+          .required("Email is required"),
+        password: Yup.string()
+          .min(6, "Password must be 6 characters long")
+          .required("Password is required"),
+      });
+      await schema.validate(formData, { abortEarly: false });
+
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        email,
-        password
+        formData.email,
+        formData.password
       );
+
       const user = userCredential.user;
       if (user) {
         toast.success("Logged in successfully! 🎉");
         navigate("/dashboard");
       }
     } catch (error) {
+      const newErrors = {};
+      if (error.inner) {
+        error.inner.forEach((err) => {
+          newErrors[err.path] = err.message;
+        });
+      }
+      setErrors(newErrors);
       const errorMessage =
         error.code === "auth/invalid-credential"
           ? "Invalid email or password"
@@ -52,13 +83,13 @@ const Login = () => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
 
-    if (!email) {
+    if (!formData.email) {
       toast.error("Please enter your email address");
       return;
     }
 
     try {
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(auth, formData.email);
       toast.success("Reset link sent to your registered email address");
       // Keep user on forgot password screen so they can see the success message
       // and try again if needed, rather than auto-navigating back
@@ -101,11 +132,15 @@ const Login = () => {
                     <Input
                       id="email"
                       type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       placeholder="abcd@example.com"
                       required
                     />
+                    {errors.email && (
+                      <p className="text-red-500">{errors.email}</p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center">
@@ -114,10 +149,14 @@ const Login = () => {
                     <Input
                       id="password"
                       type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
                       required
                     />
+                    {errors.password && (
+                      <p className="text-red-500">{errors.password}</p>
+                    )}
                   </div>
                   <button
                     type="button"
@@ -171,8 +210,8 @@ const Login = () => {
                     <Input
                       id="forgot-email"
                       type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={formData.email}
+                      onChange={handleInputChange}
                       placeholder="abcd@example.com"
                       required
                     />

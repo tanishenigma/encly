@@ -67,7 +67,7 @@ const AppLayout = () => {
         <Link
           to="https://github.com/tanishenigma"
           target="blank"
-          className="bg-slate-400 h-6 w-6 rounded-full relative overflow-hidden hover:animate-bounce duration-1000 hover:scale-115">
+          className="bg-slate-400 h-6 w-6 rounded-full relative overflow-hidden hover:animate-bounce duration-1000 hover:scale-105">
           <img src="public/github-icon.svg" className="w-7.5 h-7.5 absolute " />
         </Link>
         <h1 className="text-4xl font-black mb-2 text-slate-50 tracking-wider drop-shadow-lg">

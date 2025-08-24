@@ -19,67 +19,33 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { toast } from "sonner";
-import * as Yup from "yup";
 
 const SignUp = () => {
   const navigate = useNavigate();
-
-  const [errors, setErrors] = useState({});
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      setErrors({});
-
-      const schema = Yup.object().shape({
-        username: Yup.string().required("Username is required"),
-        email: Yup.string()
-          .email("Invalid Email")
-          .required("Email is required"),
-        password: Yup.string()
-          .min(6, "Password must be 6 characters long")
-          .required("Password is required"),
-      });
-
-      await schema.validate(formData, { abortEarly: false });
-
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        formData.email,
-        formData.password
+        email,
+        password
       );
       const user = userCredential.user;
+      await updateProfile(user, { displayName: username });
 
-      await updateProfile(user, { displayName: formData.username });
-
-      toast("Account Created Successfully! You may login now.");
-      await signOut(auth);
-      navigate(`/login`);
-    } catch (error) {
-      const newErrors = {};
-      if (error.inner) {
-        error.inner.forEach((err) => {
-          newErrors[err.path] = err.message;
-        });
+      if (user) {
+        toast("Account Created Successfully! You may login now.");
+        await signOut(auth);
+        navigate(`/login`);
       }
-      setErrors(newErrors);
-      toast("ERROR: " + error.message);
+    } catch (error) {
+      toast("ERROR:", error.message);
     }
   };
-
   return (
     <div className="mt-36 flex flex-col items-center gap-10">
       <h1 className="text-8xl font-extrabold">Signup</h1>
@@ -94,52 +60,46 @@ const SignUp = () => {
                 <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  placeholder="something"
+                  type="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="something "
                   required
                 />
-                {errors.username && (
-                  <p className="text-red-500">{errors.username}</p>
-                )}
               </div>
-
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
-                  name="email"
                   type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="m@example.com"
                   required
                 />
-                {errors.email && <p className="text-red-500">{errors.email}</p>}
               </div>
-
               <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                </div>
                 <Input
                   id="password"
-                  name="password"
                   type="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                {errors.password && (
-                  <p className="text-red-500">{errors.password}</p>
-                )}
               </div>
             </div>
 
             <CardAction>
               <CardDescription>
                 Already having an account?
-                <Button variant="link" onClick={() => navigate(`/login`)}>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    navigate(`/login`);
+                  }}>
                   Login
                 </Button>
               </CardDescription>

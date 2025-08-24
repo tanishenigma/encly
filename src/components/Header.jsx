@@ -12,18 +12,25 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LinkIcon, LogOut } from "lucide-react";
 import { auth } from "../lib/firebase.js";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-
+  const username = String(user?.displayName);
+  const displayUserName = username.charAt(0).toUpperCase() + username.slice(1);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
       setUser(currentuser);
     });
     return () => unsubscribe();
   }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
+
   return (
     <nav className="py-4 mx-15 flex justify-between items-center">
       <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 cursor-pointer">
@@ -44,24 +51,24 @@ const Header = () => {
           Login
         </Button>
       ) : (
-        <DropdownMenu>
+        <DropdownMenu className="cursor-pointer">
           <DropdownMenuTrigger>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src={user.photoURL} />
               <AvatarFallback>PFP</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel className="text-center">
-              Tanish Sharma
+              Hi, {displayUserName}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LinkIcon />
               <span>My Links</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <LogOut className="mr-2 h-4 w-4" />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4 " />
               <span>Logout</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
