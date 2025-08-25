@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ID, Permission, Role } from "appwrite";
 import { storage } from "../lib/appwrite";
 import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "sonner";
 import UserContext from "../contexts/UserContext";
-import { useContext } from "react";
 
 const Dashboard = () => {
   const currentuser = auth.currentUser;
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const { user } = useContext(UserContext);
+  const { profilePic } = useContext(UserContext);
 
   const handleUpload = async () => {
     if (!file) return toast("Please choose a file first");
@@ -42,10 +41,7 @@ const Dashboard = () => {
       <div className="bg-primary/10 rounded-xl h-auto backdrop-blur-2xl shadow-2xl p-10 ">
         {/* File upload */}
         <div className="flex flex-col bg-primary/10 p-5 rounded-xl justify-center  items-center">
-          <img
-            src="https://placehold.co/200x200"
-            className="rounded-full w-50 h-50 m-5"
-          />
+          <img src={profilePic} className="rounded-full w-50 h-50 m-5" />
           <p className="text-center font-bold text-2xl m-4">
             Hello, {currentuser?.displayName}
           </p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button.tsx";
 import {
@@ -12,38 +12,15 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LinkIcon, LogOut, User } from "lucide-react";
-import { storage } from "../lib/appwrite";
-import { auth, db } from "../lib/firebase.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
+import UserContext from "../contexts/UserContext";
+import { signOut } from "firebase/auth";
+import { auth } from "../lib/firebase.js";
 
 const Header = () => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [profilePic, setProfilePic] = useState(null);
+  const { user, profilePic } = useContext(UserContext);
   const username = String(user?.displayName);
   const displayUserName = username.charAt(0).toUpperCase() + username.slice(1);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
-      setUser(currentuser);
-      const userRef = doc(db, "users", currentuser.uid);
-
-      return onSnapshot(userRef, async (snapshot) => {
-        const data = snapshot.data();
-
-        if (data?.profilePicFileId) {
-          const url = storage.getFileView(
-            import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
-            data.profilePicFileId
-          );
-          setProfilePic(url);
-        }
-      });
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -91,7 +68,10 @@ const Header = () => {
               <User />
               <span>My Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                navigate("/links");
+              }}>
               <LinkIcon />
               <span>My Links</span>
             </DropdownMenuItem>

@@ -1,14 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserContext from "./UserContext";
+import { storage } from "../lib/appwrite";
+import { auth, db } from "../lib/firebase.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const UserContextProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    username: "",
-    profilePicUrl: "",
-  });
+  const [user, setUser] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
+      setUser(currentuser);
+      const userRef = doc(db, "users", currentuser.uid);
+
+      return onSnapshot(userRef, async (snapshot) => {
+        const data = snapshot.data();
+
+        if (data?.profilePicFileId) {
+          const url = storage.getFileView(
+            import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
+            data.profilePicFileId
+          );
+          setProfilePic(url);
+        }
+      });
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, profilePic }}>
       {children}
     </UserContext.Provider>
   );
