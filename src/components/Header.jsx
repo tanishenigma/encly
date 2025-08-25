@@ -28,8 +28,10 @@ const Header = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
       setUser(currentuser);
       const userRef = doc(db, "users", currentuser.uid);
+
       return onSnapshot(userRef, async (snapshot) => {
         const data = snapshot.data();
+
         if (data?.profilePicFileId) {
           const url = storage.getFileView(
             import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
@@ -39,6 +41,7 @@ const Header = () => {
         }
       });
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -69,9 +72,11 @@ const Header = () => {
       ) : (
         <DropdownMenu className="cursor-pointer">
           <DropdownMenuTrigger>
-            <Avatar>
+            <Avatar className="w-10 h-10">
               <AvatarImage src={profilePic} />
-              <AvatarFallback>PFP</AvatarFallback>
+              <AvatarFallback>
+                {username.charAt(0).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

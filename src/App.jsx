@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { Toaster } from "@/components/ui/sonner";
 import ResetPassword from "./pages/ResetPassword";
+import UserContextProvider from "./contexts/UserContextProvider";
 
 const router = createBrowserRouter([
   {
@@ -28,10 +29,10 @@ const router = createBrowserRouter([
 ]);
 function App() {
   return (
-    <>
+    <UserContextProvider>
       <RouterProvider router={router} />
       <Toaster />
-    </>
+    </UserContextProvider>
   );
 }
 

@@ -11,10 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../lib/firebase";
+import { auth, provider } from "../lib/firebase";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  signInWithPopup,
 } from "firebase/auth";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
@@ -27,6 +28,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -115,6 +117,15 @@ const Login = () => {
     }
   };
 
+  const googleAuth = () => {
+    try {
+      signInWithPopup(auth, provider);
+      navigate("/dashboard");
+    } catch (error) {
+      toast("Error:" + error.message);
+    }
+  };
+
   return (
     <>
       {!showForgotPassword ? (
@@ -181,7 +192,11 @@ const Login = () => {
                 <Button type="submit" className="w-full">
                   Login
                 </Button>
-                <Button variant="outline" className="w-full" type="button">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  type="button"
+                  onClick={googleAuth}>
                   Login with Google
                 </Button>
               </CardFooter>

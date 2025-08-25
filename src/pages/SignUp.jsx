@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Card,
   CardAction,
@@ -12,14 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../lib/firebase";
+import { auth, provider } from "../lib/firebase";
 import {
   createUserWithEmailAndPassword,
   signOut,
   updateProfile,
+  signInWithPopup,
 } from "firebase/auth";
 import { toast } from "sonner";
 import * as Yup from "yup";
+import UserContext from "../contexts/UserContext";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -30,6 +32,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const { setUser } = useContext(UserContext);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +67,10 @@ const SignUp = () => {
       const user = userCredential.user;
 
       await updateProfile(user, { displayName: formData.username });
+      setUser({
+        username: formData.username,
+        profilePicUrl: "", // initially empty
+      });
 
       toast("Account Created Successfully! You may login now.");
       await signOut(auth);
@@ -77,6 +84,14 @@ const SignUp = () => {
       }
       setErrors(newErrors);
       toast("ERROR: " + error.message);
+    }
+  };
+  const googleAuth = () => {
+    try {
+      signInWithPopup(auth, provider);
+      navigate("/dashboard");
+    } catch (error) {
+      toast("Error:" + error.message);
     }
   };
 
@@ -149,7 +164,7 @@ const SignUp = () => {
             <Button type="submit" className="w-full">
               Sign up
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={googleAuth}>
               Sign up with Google
             </Button>
           </CardFooter>
