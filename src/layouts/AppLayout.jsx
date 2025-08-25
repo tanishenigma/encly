@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header";
-import { Toaster } from "@/components/ui/sonner";
 
 const AppLayout = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -17,6 +16,10 @@ const AppLayout = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  const location = useLocation();
+  const noOutletRoutes = ["/login", "/signup", "/auth"];
+  const hideLayout = noOutletRoutes.includes(location.pathname);
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-black/50">
       <div className="fixed inset-0 -z-20">
@@ -27,9 +30,11 @@ const AppLayout = () => {
         <div className="absolute inset-0 opacity-[0.02] bg-repeat" />
       </div>
 
-      <div className="relative z-50">
-        <Header />
-      </div>
+      {!hideLayout && (
+        <div className="relative z-50">
+          <Header />
+        </div>
+      )}
       <main className="relative z-50 min-h-screen mx-auto container flex justify-center">
         <Outlet />
 

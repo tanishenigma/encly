@@ -10,12 +10,10 @@ const Auth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Listen for auth changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
 
-    // Cleanup listener on unmount
     return () => unsubscribe();
   }, []);
 
@@ -39,8 +37,15 @@ const Auth = () => {
             <>
               {" "}
               <h1 className="text-4xl font-bold">Hold Up! Let's Login First</h1>
-              <Button onClick={() => navigate("/login")}>Login</Button>
-              <Button onClick={() => navigate("/signup")} variant="outline">
+              <Button
+                className="cursor-pointer w-50"
+                onClick={() => navigate("/login")}>
+                Login
+              </Button>
+              <Button
+                className="cursor-pointer w-50"
+                onClick={() => navigate("/signup")}
+                variant="outline">
                 Sign Up
               </Button>
             </>

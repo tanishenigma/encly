@@ -1,10 +1,38 @@
 import React, { useState } from "react";
+import { ID, Permission, Role } from "appwrite";
+import { storage } from "../lib/appwrite";
+import { doc, setDoc } from "firebase/firestore";
+import { db, auth } from "../lib/firebase";
+import { toast } from "sonner";
 
 const Dashboard = () => {
+  const user = auth.currentUser;
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  const handleUpload = () => {};
+  const handleUpload = async () => {
+    if (!file) return alert("Please choose a file first");
+    setUploading(true);
+
+    try {
+      const response = await storage.createFile(
+        import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
+        ID.unique(),
+        file,
+        [Permission.read(Role.any())]
+      );
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          profilePicFileId: response.$id,
+        },
+        { merge: true }
+      );
+      setUploading(false);
+    } catch (error) {
+      toast(" Upload failed:", error);
+    }
+  };
   return (
     <div className="flex flex-col gap-y-5 items-center">
       <h1 className="text-6xl font-black">Dashboard</h1>

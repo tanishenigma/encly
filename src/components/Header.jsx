@@ -9,19 +9,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LinkIcon, LogOut } from "lucide-react";
-import { auth } from "../lib/firebase.js";
+import { LinkIcon, LogOut, User } from "lucide-react";
+import { storage } from "../lib/appwrite";
+import { auth, db } from "../lib/firebase.js";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
   const username = String(user?.displayName);
   const displayUserName = username.charAt(0).toUpperCase() + username.slice(1);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
       setUser(currentuser);
+      const userRef = doc(db, "users", currentuser.uid);
+      return onSnapshot(userRef, async (snapshot) => {
+        const data = snapshot.data();
+        if (data?.profilePicFileId) {
+          const url = storage.getFileView(
+            import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
+            data.profilePicFileId
+          );
+          setProfilePic(url);
+        }
+      });
     });
     return () => unsubscribe();
   }, []);
@@ -54,7 +70,7 @@ const Header = () => {
         <DropdownMenu className="cursor-pointer">
           <DropdownMenuTrigger>
             <Avatar>
-              <AvatarImage src={user.photoURL} />
+              <AvatarImage src={profilePic} />
               <AvatarFallback>PFP</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
@@ -63,10 +79,18 @@ const Header = () => {
               Hi, {displayUserName}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                navigate("/dashboard");
+              }}>
+              <User />
+              <span>My Profile</span>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <LinkIcon />
               <span>My Links</span>
             </DropdownMenuItem>
+
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4 " />
               <span>Logout</span>
