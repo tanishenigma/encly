@@ -41,7 +41,13 @@ const Dashboard = () => {
       <div className="bg-primary/10 rounded-xl h-auto backdrop-blur-2xl shadow-2xl p-10 ">
         {/* File upload */}
         <div className="flex flex-col bg-primary/10 p-5 rounded-xl justify-center  items-center">
-          <img src={profilePic} className="rounded-full w-50 h-50 m-5" />
+          <img
+            src={
+              profilePic ||
+              "https://media.istockphoto.com/id/1393750072/vector/flat-white-icon-man-for-web-design-silhouette-flat-illustration-vector-illustration-stock.jpg?s=612x612&w=0&k=20&c=s9hO4SpyvrDIfELozPpiB_WtzQV9KhoMUP9R9gVohoU="
+            }
+            className="rounded-full w-50 h-50 m-5"
+          />
           <p className="text-center font-bold text-2xl m-4">
             Hello, {currentuser?.displayName}
           </p>

@@ -70,7 +70,7 @@ const Header = () => {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                navigate("/links");
+                navigate("/");
               }}>
               <LinkIcon />
               <span>My Links</span>

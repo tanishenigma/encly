@@ -11,15 +11,30 @@ import SignUp from "./pages/SignUp";
 import { Toaster } from "@/components/ui/sonner";
 import ResetPassword from "./pages/ResetPassword";
 import UserContextProvider from "./contexts/UserContextProvider";
-
+import ProtectedRoute from "./components/ProtectedRoute";
+import AuthContextProvider from "./contexts/AuthContextProvider";
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
       { path: "/", element: <LandingPage /> },
-      { path: "/dashboard", element: <Dashboard /> },
+      {
+        path: "/dashboard",
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
+      },
       { path: "/auth", element: <Auth /> },
-      { path: "/link/:id", element: <LinkPage /> },
+      {
+        path: "/link/:id",
+        element: (
+          <ProtectedRoute>
+            <LinkPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "/signup", element: <SignUp /> },
       { path: "/login", element: <Login /> },
       { path: "/:id", element: <Redirect /> },
@@ -29,10 +44,12 @@ const router = createBrowserRouter([
 ]);
 function App() {
   return (
-    <UserContextProvider>
-      <RouterProvider router={router} />
-      <Toaster />
-    </UserContextProvider>
+    <AuthContextProvider>
+      <UserContextProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </UserContextProvider>
+    </AuthContextProvider>
   );
 }
 
