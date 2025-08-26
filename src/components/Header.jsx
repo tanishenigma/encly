@@ -29,7 +29,7 @@ const Header = () => {
 
   return (
     <nav className="py-4 mx-15 flex justify-between items-center">
-      <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 cursor-pointer">
+      <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 ">
         <LinkIcon
           onClick={() => {
             navigate("/");
@@ -48,7 +48,7 @@ const Header = () => {
         </Button>
       ) : (
         <DropdownMenu className="cursor-pointer">
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger className="cursor-pointer">
             <Avatar className="w-10 h-10">
               <AvatarImage src={profilePic} />
               <AvatarFallback>
@@ -62,6 +62,7 @@ const Header = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
+              className="cursor-pointer"
               onClick={() => {
                 navigate("/dashboard");
               }}>
@@ -69,6 +70,7 @@ const Header = () => {
               <span>My Profile</span>
             </DropdownMenuItem>
             <DropdownMenuItem
+              className="cursor-pointer"
               onClick={() => {
                 navigate("/");
               }}>
@@ -76,7 +78,7 @@ const Header = () => {
               <span>My Links</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={handleLogout}>
+            <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4 " />
               <span>Logout</span>
             </DropdownMenuItem>

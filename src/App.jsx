@@ -8,11 +8,12 @@ import Dashboard from "./pages/Dashboard";
 import Redirect from "./pages/RedirectLink";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import { Toaster } from "@/components/ui/sonner";
 import ResetPassword from "./pages/ResetPassword";
 import UserContextProvider from "./contexts/UserContextProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedAuth from "./components/ProtectedAuth";
 import AuthContextProvider from "./contexts/AuthContextProvider";
+import { Toaster } from "@/components/ui/sonner";
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -26,7 +27,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      { path: "/auth", element: <Auth /> },
+      {
+        path: "/auth",
+        element: (
+          <ProtectedAuth>
+            <Auth />{" "}
+          </ProtectedAuth>
+        ),
+      },
       {
         path: "/link/:id",
         element: (
@@ -35,8 +43,23 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      { path: "/signup", element: <SignUp /> },
-      { path: "/login", element: <Login /> },
+      {
+        path: "/signup",
+        element: (
+          <ProtectedAuth>
+            <SignUp />
+          </ProtectedAuth>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <ProtectedAuth>
+            {" "}
+            <Login />
+          </ProtectedAuth>
+        ),
+      },
       { path: "/:id", element: <Redirect /> },
       { path: "/reset", element: <ResetPassword /> },
     ],

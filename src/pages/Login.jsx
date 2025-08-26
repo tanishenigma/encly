@@ -93,10 +93,7 @@ const Login = () => {
     try {
       await sendPasswordResetEmail(auth, formData.email);
       toast.success("Reset link sent to your registered email address");
-      // Keep user on forgot password screen so they can see the success message
-      // and try again if needed, rather than auto-navigating back
     } catch (error) {
-      // Handle specific Firebase auth errors for better UX
       let errorMessage = "Failed to send reset email";
 
       switch (error.code) {
@@ -164,6 +161,7 @@ const Login = () => {
                       value={formData.password}
                       onChange={handleInputChange}
                       required
+                      className="cursor-pointer"
                     />
                     {errors.password && (
                       <p className="text-red-500">{errors.password}</p>
@@ -180,7 +178,7 @@ const Login = () => {
                 <CardDescription className="mt-4 text-right">
                   Don't have an account?
                   <Button
-                    className="m-0 p-0 pl-2"
+                    className="m-0 p-0 pl-2 cursor-pointer"
                     variant="link"
                     type="button"
                     onClick={() => navigate("/signup")}>
@@ -189,12 +187,12 @@ const Login = () => {
                 </CardDescription>
               </CardContent>
               <CardFooter className="flex-col gap-2">
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full cursor-pointer">
                   Login
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full"
+                  className="w-full cursor-pointer"
                   type="button"
                   onClick={googleAuth}>
                   Login with Google

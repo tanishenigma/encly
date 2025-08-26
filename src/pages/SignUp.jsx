@@ -154,17 +154,23 @@ const SignUp = () => {
             <CardAction>
               <CardDescription>
                 Already having an account?
-                <Button variant="link" onClick={() => navigate(`/login`)}>
+                <Button
+                  variant="link"
+                  className="cursor-pointer"
+                  onClick={() => navigate(`/login`)}>
                   Login
                 </Button>
               </CardDescription>
             </CardAction>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full cursor-pointer">
               Sign up
             </Button>
-            <Button variant="outline" className="w-full" onClick={googleAuth}>
+            <Button
+              variant="outline"
+              className="w-full cursor-pointer"
+              onClick={googleAuth}>
               Sign up with Google
             </Button>
           </CardFooter>
