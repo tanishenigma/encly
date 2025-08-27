@@ -28,7 +28,6 @@ const LandingPage = () => {
             value={longUrl}
             onChange={(e) => {
               setLongUrl(e.target.value);
-              console.log(longUrl);
             }}
           />
           <Button className="cursor-pointer text-slate-50 w-full backdrop-blur-5xl ">

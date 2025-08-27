@@ -43,7 +43,6 @@ const Dashboard = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       const username = auth.currentUser;
-      console.log(username.uid);
 
       if (user) {
         try {
@@ -104,7 +103,7 @@ const Dashboard = () => {
         <div className="flex w-full gap-5 items-center">
           <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
             Links Created
-            <p className="pt-5 ">0</p>
+            <p className="pt-5 ">{urls.length}</p>
           </div>
 
           <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
