@@ -73,7 +73,13 @@ const AppLayout = () => {
           to="https://github.com/tanishenigma"
           target="blank"
           className="bg-slate-400 h-5 w-5 rounded-full relative overflow-hidden hover:animate-bounce duration-1000 hover:scale-105">
-          <img src="public/github-icon.svg" className="w-6 h-6f absolute " />
+          <img
+            src="/github-icon.svg"
+            className="w-6 h-6 absolute "
+            loading="lazy"
+            decoding="async"
+            alt="Github Logo"
+          />
         </Link>
         <h1 className="text-4xl font-black mb-2 text-slate-50 tracking-wider drop-shadow-lg">
           Encly

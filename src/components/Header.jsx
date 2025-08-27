@@ -50,7 +50,12 @@ const Header = () => {
         <DropdownMenu className="cursor-pointer">
           <DropdownMenuTrigger className="cursor-pointer">
             <Avatar className="w-10 h-10">
-              <AvatarImage src={profilePic} />
+              <AvatarImage
+                src={profilePic}
+                className="object-cover w-10 h-10"
+                alt="profile-picture"
+                clas
+              />
               <AvatarFallback>
                 {username.charAt(0).toUpperCase()}
               </AvatarFallback>

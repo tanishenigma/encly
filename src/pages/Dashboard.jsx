@@ -5,15 +5,17 @@ import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "sonner";
 import UserContext from "../contexts/UserContext";
-import { Copy, Filter } from "lucide-react";
+import { ClipboardClock, Copy, Filter } from "lucide-react";
 import { getUserUrls } from "../services/urlService";
 import { onAuthStateChanged } from "firebase/auth";
+import { getClicks } from "../services/clickServices";
 
 const Dashboard = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const { profilePic } = useContext(UserContext);
   const [urls, setUrls] = useState([]);
+  const [clicks, setClicks] = useState(null);
   const currentuser = auth.currentUser;
 
   const handleUpload = async () => {
@@ -42,12 +44,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      const username = auth.currentUser;
-
       if (user) {
         try {
           const data = await getUserUrls();
           setUrls(data);
+        } catch (error) {
+          toast.error("Failed to fetch URLs: " + error.message);
+        }
+      }
+
+      if (user) {
+        try {
+          const clickData = await getUserUrls();
+          setClicks(clickData);
         } catch (error) {
           toast.error("Failed to fetch URLs: " + error.message);
         }
@@ -68,24 +77,31 @@ const Dashboard = () => {
                 profilePic ||
                 "https://media.istockphoto.com/id/1393750072/vector/flat-white-icon-man-for-web-design-silhouette-flat-illustration-vector-illustration-stock.jpg?s=612x612&w=0&k=20&c=s9hO4SpyvrDIfELozPpiB_WtzQV9KhoMUP9R9gVohoU="
               }
-              className="rounded-full w-50 h-50 m-5"
+              className="rounded-full w-50 h-50 m-5 object-cover"
+              alt="profile-picture"
             />
             <p className="text-center font-bold text-2xl m-4">
               Hello, {currentuser?.displayName}
             </p>
-            <p className="font-semibold p-5 border-t-1 border-slate-50/50 w-full text-center">
-              Change Your Profile Picture
-            </p>
+            <label
+              htmlFor="upload"
+              className="font-semibold p-5 border-t border-slate-50/50 w-full text-center block">
+              Upload your profile picture
+            </label>
+
             <input
+              id="upload"
+              name="profile-picture"
               type="file"
               accept="image/*"
+              aria-label="Upload your profile picture"
               onChange={(e) => setFile(e.target.files[0])}
               className="g-primary/10 p-5 rounded-full
-             file:bg-primary/10 file:text-white file:px-4 file:py-2
-             file:rounded-full file:border-none
-             file:cursor-pointer
-             file:text-sm
-             file:hover:bg-primary "
+    file:bg-primary/10 file:text-white file:px-4 file:py-2
+    file:rounded-full file:border-none
+    file:cursor-pointer
+    file:text-sm
+    file:hover:bg-primary"
             />
 
             {/* Save button */}
@@ -103,12 +119,12 @@ const Dashboard = () => {
         <div className="flex w-full gap-5 items-center">
           <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
             Links Created
-            <p className="pt-5 ">{urls.length}</p>
+            <p className="pt-5 ">{urls?.length}</p>
           </div>
 
           <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
             Total Clicks
-            <p className="pt-5">0</p>
+            <p className="pt-5">{clicks?.length}</p>
           </div>
         </div>
       </div>
@@ -153,7 +169,9 @@ const Dashboard = () => {
                           {u.original_url}
                         </td>
                         <td className="px-4 py-2">
-                          <button className="px-2 py-1 cursor-pointer  text-white rounded hover:scale-110 duration-300">
+                          <button
+                            className="px-2 py-1 cursor-pointer  text-white rounded hover:scale-110 duration-300"
+                            aria-hidden="true">
                             <Copy />
                           </button>
                         </td>

@@ -24,7 +24,11 @@ const UserContextProvider = ({ children }) => {
         if (data?.profilePicFileId) {
           const url = storage.getFileView(
             import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
-            data.profilePicFileId
+            data.profilePicFileId,
+            150,
+            150,
+            "center",
+            80
           );
           setProfilePic(url);
         }

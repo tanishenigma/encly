@@ -2,12 +2,74 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+
+    <!-- ✅ Title & Description -->
+    <title>Encly – Secure URL Shortener & Link Encryption Tool</title>
+    <meta
+      name="description"
+      content="Encly lets you shorten URLs and encrypt them for secure sharing. Protect your links with Encly's privacy-first shortener." />
+    <meta
+      name="keywords"
+      content="Encly, URL shortener, encrypted links, secure URL shortener, private link sharing, link encryption tool" />
+
+    <!-- ✅ Open Graph -->
+    <meta
+      property="og:title"
+      content="Encly – Secure URL Shortener & Link Encryption Tool" />
+    <meta
+      property="og:description"
+      content="Shorten and encrypt your links with Encly for secure, private sharing." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yourdomain.com" />
+    <meta
+      property="og:image"
+      content="https://yourdomain.com/encly-preview.png" />
+
+    <!-- ✅ Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Encly – Secure URL Shortener & Link Encryption Tool" />
+    <meta
+      name="twitter:description"
+      content="Encly helps you shorten and encrypt URLs to keep your links safe and private." />
+    <meta
+      name="twitter:image"
+      content="https://yourdomain.com/encly-preview.png" />
+
+    <!-- ✅ Favicons -->
+    <link rel="icon" href="/vite.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- ✅ Theme Color -->
+    <meta name="theme-color" content="#ff4da6" />
+
+    <!-- ✅ Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Encly",
+        "operatingSystem": "Web",
+        "applicationCategory": "Utility",
+        "description": "Encly is a secure URL shortener and encryption tool for safe link sharing.",
+        "url": "https://yourdomain.com",
+        "image": "https://yourdomain.com/encly-preview.png",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <main>
+      <div id="root"></div>
+    </main>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
