@@ -1,17 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ID, Permission, Role } from "appwrite";
 import { storage } from "../lib/appwrite";
 import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "sonner";
 import UserContext from "../contexts/UserContext";
-import { Filter } from "lucide-react";
+import { Copy, Filter } from "lucide-react";
+import { getUserUrls } from "../services/urlService";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Dashboard = () => {
-  const currentuser = auth.currentUser;
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const { profilePic } = useContext(UserContext);
+  const [urls, setUrls] = useState([]);
+  const currentuser = auth.currentUser;
 
   const handleUpload = async () => {
     if (!file) return toast("Please choose a file first");
@@ -36,6 +39,24 @@ const Dashboard = () => {
       toast.error(`Upload failed: ${error.message}`);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      const username = auth.currentUser;
+      console.log(username.uid);
+
+      if (user) {
+        try {
+          const data = await getUserUrls();
+          setUrls(data);
+        } catch (error) {
+          toast.error("Failed to fetch URLs: " + error.message);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
   return (
     <div className="grid gap-30 w-full">
       <div className="flex flex-col gap-y-5 items-center">
@@ -106,6 +127,45 @@ const Dashboard = () => {
               placeholder="Filter Links..."
             />
             <Filter className="absolute hover:scale-110 duration-300 cursor-pointer " />
+          </div>
+          <div>
+            <div className="bg-primary/10 w-full h-fit mt-5 rounded-xl p-5 ">
+              {urls.length != 0 ? (
+                <table className="min-w-full border border-primary/30 text-slate-50 text-left">
+                  <thead className="bg-primary/10">
+                    <tr>
+                      <th className="px-4 py-2">Short URL</th>
+                      <th className="px-4 py-2 ">Original URL</th>
+                      <th className="px-4 py-2">Copy</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {urls.map((u) => (
+                      <tr key={u.id}>
+                        <td className="px-4 py-2 text-pink-600 underline">
+                          <a
+                            href={u.short_url}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {u.short_url}
+                          </a>
+                        </td>
+                        <td className="px-4 py-2  text-primary">
+                          {u.original_url}
+                        </td>
+                        <td className="px-4 py-2">
+                          <button className="px-2 py-1 cursor-pointer  text-white rounded hover:scale-110 duration-300">
+                            <Copy />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="text-slate-400 font-light"> No Links Yet</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

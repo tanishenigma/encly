@@ -10,6 +10,10 @@ const UserContextProvider = ({ children }) => {
   const [profilePic, setProfilePic] = useState(null);
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("session");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
       setUser(currentuser);
       const userRef = doc(db, "users", currentuser.uid);

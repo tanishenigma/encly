@@ -61,9 +61,10 @@ const Login = () => {
       );
 
       const user = userCredential.user;
+      localStorage.setItem("session", JSON.stringify(user));
       if (user) {
         toast.success("Logged in successfully! 🎉");
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (error) {
       const newErrors = {};

@@ -89,7 +89,7 @@ const SignUp = () => {
   const googleAuth = () => {
     try {
       signInWithPopup(auth, provider);
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       toast("Error:" + error.message);
     }
