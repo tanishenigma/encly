@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "../components/ui/button";
-
+import { auth } from "../lib/firebase";
 import Doubts from "../components/Doubts";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
   const [longUrl, setLongUrl] = useState("");
   const navigate = useNavigate();
 
+  const user = auth.currentUser;
+
   const handleUrl = (e) => {
     e.preventDefault();
-    if (longUrl) navigate(`auth?/createNew=${longUrl}`);
+    if (!user) {
+      if (longUrl) navigate(`auth?/createNew=${longUrl}`);
+    } else navigate("/link");
   };
   return (
     <div className="flex flex-col ">
