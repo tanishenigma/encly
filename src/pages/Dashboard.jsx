@@ -65,6 +65,15 @@ const Dashboard = () => {
 
     return () => unsubscribe();
   }, []);
+
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast("Copied to clipboard Successfully!");
+    } catch (err) {
+      toast("Failed to copy to clipboard!", err);
+    }
+  };
   return (
     <div className="grid gap-30 w-full">
       <div className="flex flex-col gap-y-5 items-center">
@@ -172,7 +181,11 @@ const Dashboard = () => {
                           <button
                             className="px-2 py-1 cursor-pointer  text-white rounded hover:scale-110 duration-300"
                             aria-hidden="true">
-                            <Copy />
+                            <Copy
+                              onClick={() => {
+                                copyToClipboard(u.short_url);
+                              }}
+                            />
                           </button>
                         </td>
                       </tr>
