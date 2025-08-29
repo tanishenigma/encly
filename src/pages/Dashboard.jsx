@@ -86,13 +86,13 @@ const Dashboard = () => {
         <h1 className="text-6xl font-black">Dashboard</h1>
         <div className="bg-primary/10 rounded-xl h-auto backdrop-blur-2xl shadow-2xl p-10 ">
           {/* File upload */}
-          <div className="flex flex-col bg-primary/10 p-5 rounded-xl justify-center  items-center">
+          <div className="bg-primary/10 p-5 rounded-xl justify-center  items-center flex flex-col">
             <img
               src={
                 profilePic ||
                 "https://media.istockphoto.com/id/1393750072/vector/flat-white-icon-man-for-web-design-silhouette-flat-illustration-vector-illustration-stock.jpg?s=612x612&w=0&k=20&c=s9hO4SpyvrDIfELozPpiB_WtzQV9KhoMUP9R9gVohoU="
               }
-              className="rounded-full w-50 h-50 m-5 object-cover"
+              className="rounded-full w-50 h-50 m-5 object border-2 border-primary/80"
               alt="profile-picture"
             />
             <p className="text-center font-bold text-2xl m-4">
@@ -162,17 +162,10 @@ const Dashboard = () => {
             <Filter className="absolute hover:scale-110 duration-300 cursor-pointer " />
           </div>
           <div>
-            <div className="bg-primary/10 w-full h-fit mt-5 rounded-xl p-5 ">
+            <div className="flex bg-primary/10 w-full h-fit mt-5 rounded-xl p-5 ">
               {urls.length != 0 ? (
-                <div className="min-w-full border border-primary/30 text-slate-50 text-left flex flex-col md:flex-row">
-                  <div className="bg-primary/10">
-                    <div>
-                      <div className="px-4 py-2">Title</div>
-                      <div className="px-4 py-2">Short URL</div>
-                      <div className="px-4 py-2 ">Original URL</div>
-                      <div className="px-4 py-2">Copy</div>
-                    </div>
-                  </div>
+                <div className="min-w-full border border-primary/30 text-slate-50 text-left  md:flex-row">
+                  <div className="bg-primary/10"></div>
                   <div>
                     {(filteredUrls || []).map((u, i) => (
                       <LinkCard key={i} url={u} filteredUrls={filteredUrls} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header";
+import useScrollToTop from "../hooks/useScrollToTop";
 
 const AppLayout = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -19,6 +20,7 @@ const AppLayout = () => {
   const location = useLocation();
   const noOutletRoutes = ["/login", "/signup", "/auth"];
   const hideLayout = noOutletRoutes.includes(location.pathname);
+  useScrollToTop();
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-black/50">
