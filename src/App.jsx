@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/link/:id",
+        path: "/link/",
         element: (
           <ProtectedRoute>
             <LinkPage />

@@ -28,7 +28,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="py-4 mx-15 flex justify-between items-center">
+    <nav className="py-4 mx-15 flex justify-between items-center ">
       <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 ">
         <LinkIcon
           onClick={() => {
@@ -77,7 +77,7 @@ const Header = () => {
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={() => {
-                navigate("/");
+                navigate("/link");
               }}>
               <LinkIcon />
               <span>My Links</span>

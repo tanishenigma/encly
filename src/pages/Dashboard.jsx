@@ -1,23 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { ID, Permission, Role } from "appwrite";
 import { storage } from "../lib/appwrite";
 import { doc, setDoc } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
 import { toast } from "sonner";
 import UserContext from "../contexts/UserContext";
-import { ClipboardClock, Copy, Filter } from "lucide-react";
-import { getUserUrls } from "../services/urlService";
-import { onAuthStateChanged } from "firebase/auth";
-import { getClicks } from "../services/clickServices";
-import LinkCard from "../components/LinkCard";
+
 
 const Dashboard = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const { profilePic } = useContext(UserContext);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [urls, setUrls] = useState([]);
-  const [clicks, setClicks] = useState(null);
   const currentuser = auth.currentUser;
 
   const handleUpload = async () => {
@@ -43,42 +36,6 @@ const Dashboard = () => {
       toast.error(`Upload failed: ${error.message}`);
     }
   };
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const data = await getUserUrls();
-          setUrls(data);
-        } catch (error) {
-          toast.error("Failed to fetch URLs: " + error.message);
-        }
-      }
-
-      if (user) {
-        try {
-          const clickData = await getClicks();
-          setClicks(clickData);
-        } catch (error) {
-          toast.error("Failed to fetch URLs: " + error.message);
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const filteredUrls = urls?.filter((url) => {
-    return (
-      (url.title?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-      (url.short_url?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase()
-      ) ||
-      (url.original_url?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase()
-      )
-    );
-  });
 
   return (
     <div className="grid gap-30 w-full">
@@ -126,56 +83,6 @@ const Dashboard = () => {
               className="px-4 py-2 bg-primary text-slate-50 rounded-lg block m-5 cursor-pointer">
               {uploading ? "Saving..." : "Save Changes"}
             </button>
-          </div>
-        </div>
-      </div>
-      {/* {Links Section} */}
-      <div>
-        <div className="flex w-full gap-5 items-center">
-          <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
-            Links Created
-            <p className="pt-5 ">{urls?.length}</p>
-          </div>
-
-          <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
-            Total Clicks
-            <p className="pt-5">{clicks?.length}</p>
-          </div>
-        </div>
-      </div>
-      <div className="border-t-1 border-purple-400/20">
-        <div className="">
-          <div className="flex justify-between py-15">
-            <h1 className="text-6xl font-bold">My Links</h1>
-            <button className="bg-primary rounded-lg px-5 cursor-pointer">
-              Create Link
-            </button>
-          </div>
-          <div className="flex justify-end w-full bg-primary/10 rounded-md p-4 mt-5 border-2 border-primary/20 relative">
-            <input
-              className="w-full focus-within:outline-0"
-              placeholder="Filter Links..."
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
-            />
-            <Filter className="absolute hover:scale-110 duration-300 cursor-pointer " />
-          </div>
-          <div>
-            <div className="flex bg-primary/10 w-full h-fit mt-5 rounded-xl p-5 ">
-              {urls.length != 0 ? (
-                <div className="min-w-full border border-primary/30 text-slate-50 text-left  md:flex-row">
-                  <div className="bg-primary/10"></div>
-                  <div>
-                    {(filteredUrls || []).map((u, i) => (
-                      <LinkCard key={i} url={u} filteredUrls={filteredUrls} />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-slate-400 font-light"> No Links Yet</p>
-              )}
-            </div>
           </div>
         </div>
       </div>
