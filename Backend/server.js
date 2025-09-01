@@ -15,7 +15,7 @@ admin.initializeApp({
 
 // ---------- Supabase Settings ----------
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE;
 
 // ---------- Endpoint: exchange Firebase ID token for Supabase session ----------
 app.post("/auth/firebase", async (req, res) => {
@@ -50,7 +50,6 @@ app.post("/auth/firebase", async (req, res) => {
     }
 
     const supabaseSession = await resp.json();
-
     res.json(supabaseSession);
   } catch (err) {
     console.error(err);
