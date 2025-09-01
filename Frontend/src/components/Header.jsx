@@ -12,7 +12,7 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LinkIcon, LogOut, User } from "lucide-react";
-import UserContext from "../contexts/UserContext";
+import UserContext from "../contexts/UserContext.js";
 import { signOut } from "firebase/auth";
 import { auth } from "../lib/firebase.js";
 

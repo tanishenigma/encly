@@ -52,18 +52,18 @@ const LinkPage = () => {
   return (
     <>
       <div className="w-full">
-        <div className="flex w-full gap-5 items-center ">
+        <div className="flex w-full gap-5 items-center mb-20">
           <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
             Links Created
             <p className="pt-5 ">{urls?.length}</p>
           </div>
 
-          <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md">
+          <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-md ">
             Total Clicks
             <p className="pt-5">{clicks?.length}</p>
           </div>
         </div>
-        <div className="border-t-1 border-purple-400/20">
+        <div className="border-t-1 border-purple-400/20 ">
           <div className="">
             <div className="flex justify-between py-15">
               <h1 className="text-6xl font-bold">My Links</h1>

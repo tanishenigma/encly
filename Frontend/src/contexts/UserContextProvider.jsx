@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import UserContext from "./UserContext";
-import { storage } from "../lib/appwrite";
+import UserContext from "./UserContext.js";
+import { storage } from "../lib/appwrite.js";
 import { auth, db } from "../lib/firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";

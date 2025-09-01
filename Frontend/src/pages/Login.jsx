@@ -20,6 +20,7 @@ import {
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 import * as Yup from "yup";
+import supabase from "../db/supabase";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -115,10 +116,31 @@ const Login = () => {
     }
   };
 
-  const googleAuth = () => {
+  const googleAuth = async () => {
     try {
-      signInWithPopup(auth, provider);
+      const cred = await signInWithPopup(auth, provider);
       navigate("/dashboard");
+
+      const idToken = await cred.user.getIdToken(true);
+
+      // Call backend bridge
+      const resp = await fetch("http://localhost:4000/auth/firebase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken }),
+      });
+
+      const { access_token, refresh_token, expires_in } = await resp.json();
+
+      // Set Supabase session
+      await supabase.auth.setSession({
+        access_token,
+        refresh_token,
+        expires_in,
+      });
+
+      console.log("✅ Supabase session ready (RLS enabled)");
+      toast("Supabase session ready (RLS enabled)");
     } catch (error) {
       toast("Error:" + error.message);
     }
