@@ -1,64 +1,105 @@
-import express from "express";
-import fetch from "node-fetch";
-import admin from "firebase-admin";
-import dotenv from "dotenv";
-
-dotenv.config();
-
+const express = require("express");
+const { createClient } = require("@supabase/supabase-js");
+const admin = require("firebase-admin");
 const app = express();
+
 app.use(express.json());
 
-// ---------- Firebase Admin Setup ----------
+// Initialize Firebase Admin
+const serviceAccount = require("./path-to-firebase-service-account.json");
 admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_ADMIN_KEY)),
+  credential: admin.credential.cert(serviceAccount),
 });
 
-// ---------- Supabase Settings ----------
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE;
+// Initialize Supabase with service role key
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
-// ---------- Endpoint: exchange Firebase ID token for Supabase session ----------
+// Endpoint to exchange and validate Firebase token
 app.post("/auth/firebase", async (req, res) => {
   try {
     const { idToken } = req.body;
-
-    if (!idToken) return res.status(400).json({ error: "Missing ID token" });
-
-    // 1. Verify Firebase token
-    const decoded = await admin.auth().verifyIdToken(idToken);
-
-    // 2. Create or get user in Supabase
-    const resp = await fetch(
-      `${SUPABASE_URL}/auth/v1/token?grant_type=id_token`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apiKey: SUPABASE_SERVICE_KEY,
-          Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
-        },
-        body: JSON.stringify({
-          provider: "firebase",
-          id_token: idToken,
-        }),
-      }
-    );
-
-    if (!resp.ok) {
-      const err = await resp.text();
-      throw new Error(`Supabase error: ${err}`);
+    if (!idToken) {
+      return res.status(400).json({ error: "Missing idToken" });
     }
 
-    const supabaseSession = await resp.json();
-    res.json(supabaseSession);
+    // Verify Firebase JWT
+    let decodedToken;
+    try {
+      decodedToken = await admin.auth().verifyIdToken(idToken, true); // true enables revocation check
+    } catch (error) {
+      return res
+        .status(401)
+        .json({
+          error: "Invalid or revoked Firebase JWT",
+          details: error.message,
+        });
+    }
+
+    // Extract claims
+    const { email, uid: firebase_uid, exp, iss, aud } = decodedToken;
+
+    // Additional validation
+    const expectedIssuer = `https://securetoken.google.com/${process.env.FIREBASE_PROJECT_ID}`;
+    const expectedAudience = process.env.FIREBASE_PROJECT_ID;
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    if (iss !== expectedIssuer) {
+      return res
+        .status(401)
+        .json({
+          error: `Invalid issuer: expected ${expectedIssuer}, got ${iss}`,
+        });
+    }
+    if (aud !== expectedAudience) {
+      return res
+        .status(401)
+        .json({
+          error: `Invalid audience: expected ${expectedAudience}, got ${aud}`,
+        });
+    }
+    if (exp < currentTime) {
+      return res.status(401).json({ error: "Token expired" });
+    }
+    if (!firebase_uid) {
+      return res.status(401).json({ error: "No user ID in token" });
+    }
+
+    // Ensure user exists in Supabase
+    let { data: user, error } = await supabase.auth.admin.createUser({
+      email,
+      user_metadata: { firebase_uid },
+    });
+
+    if (error && error.message.includes("already exists")) {
+      ({ data: user, error } = await supabase.auth.admin.getUserByEmail(email));
+    }
+    if (error) throw error;
+
+    // Generate a Supabase session
+    const { data: session, error: sessionError } =
+      await supabase.auth.admin.generateLink({
+        type: "magiclink",
+        email,
+      });
+
+    if (sessionError) throw sessionError;
+
+    // Optionally, upsert profile in urls table
+    await supabase.from("urls").upsert(
+      {
+        user_id: firebase_uid,
+        email,
+      },
+      { onConflict: "user_id" }
+    );
+
+    res.json({ access_token: session.properties.action_link, user });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
-// ---------- Start server ----------
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () =>
-  console.log(`🚀 Backend running on http://localhost:${PORT}`)
-);
+app.listen(3000, () => console.log("Server running on port 3000"));

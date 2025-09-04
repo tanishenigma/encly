@@ -56,19 +56,19 @@ const LinkCard = ({ url, setUrls }) => {
           alt="QR-Code"
           className="w-50 h-50 border-2 border-primary/30 rounded-xl"
         />
-        <div className="grid ">
+        <div className="grid whitespace-nowrap ">
           {" "}
           <div>
             {" "}
             <Link to={`/link/${url?.id}`}>
               {/* Title */}
-              <p className="truncate hover:text-primary cursor-pointer text-5xl font-black">
+              <p className=" hover:text-primary cursor-pointer text-5xl font-black mb-2">
                 {url.title}
               </p>
             </Link>
             {/* Short URL */}
             <Link
-              className=" text-primary hover:text-primary/80 cursor-pointer text-3xl"
+              className=" text-primary hover:text-primary/80 cursor-pointer text-3xl "
               to={`/link/${url?.id}`}>
               https://enc.ly/
               {url?.custom_url ? url?.custom_url : url.short_url}

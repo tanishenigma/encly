@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
 @theme {
   /* Define a custom animation variable */
   --animate-accordion-down: accordion-down 0.2s ease-out;
@@ -42,6 +43,14 @@
     font: bold;
     background-color: #22d3ee;
     /* cyan */
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
   }
 }
 :root {

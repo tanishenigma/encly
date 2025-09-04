@@ -23,7 +23,7 @@ const AppLayout = () => {
   useScrollToTop();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-black/50">
+    <div className="relative min-h-screen overflow-x-hidden bg-black/50 ">
       <div className="fixed inset-0 -z-20">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-purple-900 to-slate-700 animate-pulse  duration-[10s]" />
 
