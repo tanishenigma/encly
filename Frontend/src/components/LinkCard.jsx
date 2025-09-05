@@ -28,17 +28,17 @@ const LinkCard = ({ url, setUrls }) => {
     }
   };
 
-  const handleDownload = async (qr, title) => {
+  const handleDownload = async () => {
     try {
-      const response = await fetch(qr);
-      const blob = await response.blob();
+      const imageUrl = url?.qr;
+      const fileName = url?.title;
+      const anchor = document.createElement("a");
+      anchor.href = imageUrl;
+      anchor.download = fileName;
 
-      // force correct MIME type if Supabase URL doesn’t include an extension
-      const file = new File([blob], `${title || "qr-code"}.png`, {
-        type: "image/png",
-      });
-
-      saveAs(file);
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
     } catch (error) {
       toast.error("Failed to download QR: " + error.message);
     }
@@ -108,7 +108,7 @@ const LinkCard = ({ url, setUrls }) => {
         <button
           className="p-2 cursor-pointer hover:scale-110 duration-200 hover:text-primary "
           title="Download QR Code"
-          onClick={() => handleDownload((url?.qr, url?.title))}>
+          onClick={() => handleDownload()}>
           <Download size={25} />
         </button>
       </div>
