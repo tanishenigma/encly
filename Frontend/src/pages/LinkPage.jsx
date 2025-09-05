@@ -75,20 +75,22 @@ const LinkPage = () => {
     <>
       {!create ? (
         <div className="w-full">
-          <div className="flex w-full gap-5 items-center mb-20">
-            <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-xl">
+          <div className="flex w-full text-center md:text-left  justify-center gap-5 items-center mb-20">
+            <div className="justify-center bg-primary/5 w-full text-xl md:text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-xl md:ml-0 ml-5">
               Lynks Created
               <p className="pt-5 ">{urls?.length}</p>
             </div>
 
-            <div className="bg-primary/5 w-full text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-sm ">
+            <div className="bg-primary/5 w-full text-xl md:text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-sm md:mr-0 mr-5">
               Total Clicks
               <p className="pt-5">{clicks?.length}</p>
             </div>
           </div>
           <div className="border-t-1 border-purple-400/20 ">
             <div className="flex justify-between py-10">
-              <h1 className="text-6xl font-bold">My Lynks</h1>
+              <h1 className="text-xl md:text-4xl lg:text-6xl font-bold">
+                My Lynks
+              </h1>
               <button
                 onClick={() => {
                   setCreate((prev) => !prev);

@@ -37,18 +37,18 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="grid gap-30 w-full">
-      <div className="flex flex-col gap-y-5 items-center">
-        <h1 className="text-6xl font-black">Dashboard</h1>
-        <div className="bg-primary/10 rounded-xl h-auto backdrop-blur-2xl shadow-2xl p-10 ">
+    <div className="grid md:w-full  justify-center">
+      <div className="flex flex-col  gap-y-5 items-center">
+        <h1 className="text-4xl  md:text-6xl font-black ">Dashboard</h1>
+        <div className="md:bg-primary/10 rounded-xl h-auto backdrop-blur-sm shadow-2xl md:p-10 w-[75%] md:w-full">
           {/* File upload */}
-          <div className="bg-primary/10 p-5 rounded-xl justify-center  items-center flex flex-col">
+          <div className="bg-primary/10 p-10 rounded-xl justify-center  items-center flex flex-col backdrop-blur-sm ">
             <img
               src={
                 profilePic ||
                 "https://media.istockphoto.com/id/1393750072/vector/flat-white-icon-man-for-web-design-silhouette-flat-illustration-vector-illustration-stock.jpg?s=612x612&w=0&k=20&c=s9hO4SpyvrDIfELozPpiB_WtzQV9KhoMUP9R9gVohoU="
               }
-              className="rounded-full w-50 h-50 m-5 object border-2 border-primary/80"
+              className="rounded-full w-30 h-30 md:w-50 md:h-50 m-3 md:m-5 object border-2 border-primary/80"
               alt="profile-picture"
             />
             <p className="text-center font-bold text-2xl m-4">

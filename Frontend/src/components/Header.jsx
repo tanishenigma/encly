@@ -28,7 +28,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="py-4 mx-2 md:mx-15 flex justify-between items-center">
+    <nav className="py-4 px-2 mx-2 md:mx-15 flex justify-between items-center">
       <div className="w-15 h-15 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 hover:bg-pink-950 ">
         <LinkIcon
           onClick={() => {
@@ -46,51 +46,47 @@ const Header = () => {
           Login
         </Button>
       ) : (
-        <div className="hide-scrollbar">
-          <DropdownMenu className="cursor-pointer">
-            <DropdownMenuTrigger className="cursor-pointer">
-              <Avatar className="w-10 h-10">
-                <AvatarImage
-                  src={profilePic}
-                  className="object-cover w-10 h-10"
-                  alt="profile-picture"
-                />
-                <AvatarFallback>
-                  {username.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel className="text-center">
-                Hi, {displayUserName}
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/dashboard");
-                }}>
-                <User />
-                <span>My Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/link");
-                }}>
-                <LinkIcon />
-                <span>My Links</span>
-              </DropdownMenuItem>
+        <DropdownMenu modal={false} className="cursor-pointer ">
+          <DropdownMenuTrigger className="cursor-pointer ">
+            <Avatar className="w-10 h-10">
+              <AvatarImage
+                src={profilePic}
+                className="object-cover w-10 h-10"
+                alt="profile-picture"
+              />
+              <AvatarFallback>
+                {username.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-slate-950/30 border-slate-600/20 backdrop-blur-sm ">
+            <DropdownMenuLabel className="text-center">
+              Hi, {displayUserName}
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-slate-600/20 " />
+            <DropdownMenuItem
+              className="cursor-pointer "
+              onClick={() => {
+                navigate("/dashboard");
+              }}>
+              <User />
+              <span>My Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => {
+                navigate("/link");
+              }}>
+              <LinkIcon />
+              <span>My Links</span>
+            </DropdownMenuItem>
 
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4 " />
-                <span>Logout</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+            <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4 " />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </nav>
   );

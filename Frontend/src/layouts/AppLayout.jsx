@@ -70,7 +70,7 @@ const AppLayout = () => {
             }deg)`,
           }}></div>
       </main>
-      <footer className="flex flex-col justify-center items-center relative z-10 text-center mt-10 p-10 pt-60 text-slate-400 overflow-hidden">
+      <footer className="flex flex-col justify-center items-center relative z-10 text-center p-10 md:border-hidden border-t-1 border-purple-400/20 text-slate-400 overflow-hidden">
         <Link
           to="https://github.com/tanishenigma"
           target="blank"
@@ -92,16 +92,6 @@ const AppLayout = () => {
         <p className="drop-shadow-sm">
           Made by <span className="font-bold">TanishEnigma</span> with 🖱️ & ⌨️
         </p>
-
-        {/* Footer circle with gravitational effect */}
-        <div
-          className="absolute circlePosition rounded-full -z-50 bg-fuchsia-700/10 w-300 h-300 overflow-y-hidden backdrop-blur-3xl top-15 right-90 blur-3xl
-                     transition-transform duration-400 ease-out pointer-events-none"
-          style={{
-            transform: `translate(${mousePos.x * -10}px, ${
-              mousePos.y * 12
-            }px) scale(${1 + mousePos.y * 0.04})`,
-          }}></div>
       </footer>
     </div>
   );
