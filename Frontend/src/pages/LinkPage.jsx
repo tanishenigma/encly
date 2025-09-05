@@ -4,14 +4,22 @@ import { getClicks } from "../services/clickServices";
 import { getUserUrls } from "../services/urlService";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
-import { Filter } from "lucide-react";
+import {
+  AArrowUp,
+  AlignHorizontalSpaceBetween,
+  Calendar,
+  Filter,
+  Pointer,
+} from "lucide-react";
 import LinkCard from "../components/LinkCard";
 import CreateLink from "../components/CreateLink";
 
 const LinkPage = () => {
   const [urls, setUrls] = useState([]);
+  const [filterLink, setFilterLink] = useState(false);
   const [clicks, setClicks] = useState(null);
   const [create, setCreate] = useState(false);
+  const [sortBy, setSortBy] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -38,17 +46,30 @@ const LinkPage = () => {
     return () => unsubscribe();
   }, []);
 
-  const filteredUrls = urls?.filter((url) => {
-    return (
-      (url.title?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-      (url.short_url?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase()
-      ) ||
-      (url.original_url?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase()
-      )
-    );
-  });
+  const filteredUrls = urls
+    ?.filter((url) => {
+      return (
+        (url.title?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        (url.short_url?.toLowerCase() || "").includes(
+          searchQuery.toLowerCase()
+        ) ||
+        (url.original_url?.toLowerCase() || "").includes(
+          searchQuery.toLowerCase()
+        )
+      );
+    })
+    ?.sort((a, b) => {
+      if (sortBy === "name") {
+        return (a.title || "").localeCompare(b.title || "");
+      }
+      if (sortBy === "latest") {
+        return new Date(b.created_at) - new Date(a.created_at);
+      }
+      if (sortBy === "clicks") {
+        return (b.clicks || 0) - (a.clicks || 0);
+      }
+      return 0;
+    });
 
   return (
     <>
@@ -86,7 +107,30 @@ const LinkPage = () => {
                     setSearchQuery(e.target.value);
                   }}
                 />
-                <Filter className="absolute hover:scale-110 duration-300 cursor-pointer " />
+                <Filter
+                  className="absolute hover:scale-110 duration-300 cursor-pointer "
+                  onClick={() => {
+                    setFilterLink((prev) => !prev);
+                  }}
+                />
+                {filterLink && (
+                  <div className="grid grid-cols-1 bg-primary/50 px-3 text-xl gap-y-2 absolute top-12 rounded-md backdrop-blur-xs shadow-xl shadow-black cursor-pointer py-2">
+                    <div className="flex gap-x-2 flex-row items-center hover:bg-primary/40 p-2 rounded-md">
+                      <AArrowUp />
+                      <p className="" onClick={() => setSortBy("name")}>
+                        Name
+                      </p>
+                    </div>
+                    <div className="flex gap-x-2 flex-row items-center hover:bg-primary/40 p-2 rounded-md">
+                      <Calendar size={15} />
+                      <p onClick={() => setSortBy("latest")}>Latest</p>
+                    </div>
+                    <div className="flex gap-x-2 flex-row items-center hover:bg-primary/40 p-2 rounded-md">
+                      <Pointer size={15} />
+                      <p onClick={() => setSortBy("clicks")}>Clicks</p>
+                    </div>
+                  </div>
+                )}
               </div>
               <div>
                 <div className="flex bg-primary/10 w-full h-fit mt-5 rounded-xl p-5 ">
