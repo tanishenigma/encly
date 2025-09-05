@@ -6,7 +6,6 @@ import { db, auth } from "../lib/firebase";
 import { toast } from "sonner";
 import UserContext from "../contexts/UserContext";
 
-
 const Dashboard = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);

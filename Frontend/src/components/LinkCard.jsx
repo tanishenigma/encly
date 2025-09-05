@@ -1,9 +1,9 @@
-import { Copy, Download, Trash } from "lucide-react";
+import { Copy, Download, LinkIcon, Trash } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import supabase from "../db/supabase";
-import { saveAs } from "file-saver";
+import QRCode from "react-qr-code";
 
 const LinkCard = ({ url, setUrls }) => {
   const copyToClipboard = async (text) => {
@@ -51,11 +51,26 @@ const LinkCard = ({ url, setUrls }) => {
       {/* Grid with 4 columns: QR | Title | Short URL | Original URL + Copy */}
       <div className="grid grid-cols-[200px_150px_1fr_auto] items-center gap-4 text-slate-50">
         {/* QR Code */}
-        <img
-          src={url?.qr}
-          alt="QR-Code"
-          className="w-50 h-50 border-2 border-primary/30 rounded-xl"
-        />
+        <div className="relative inline-block">
+          <QRCode
+            value={
+              url.short_url
+                ? `https://enc.ly/${url.short_url}`
+                : url.original_url
+            }
+            size={200}
+            fgColor="#2f1945"
+            bgColor="#ffffff"
+            style={{ borderRadius: "4px" }}
+          />
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="w-12 h-12 rounded-full border-slate-50/5  border-2  flex items-center justify-center bg-slate-50">
+              <LinkIcon className="shadow-lg shadow-black/30 w-10 h-10 p-2  text-[#1f1c33]" />
+            </div>
+          </div>
+        </div>
+
         <div className="grid whitespace-nowrap ">
           {" "}
           <div>

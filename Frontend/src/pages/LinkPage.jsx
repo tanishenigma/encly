@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Loading from "../components/Loading";
 import { toast } from "sonner";
 import { getClicks } from "../services/clickServices";
 import { getUserUrls } from "../services/urlService";
@@ -38,10 +37,6 @@ const LinkPage = () => {
 
     return () => unsubscribe();
   }, []);
-
-  const popCreate = () => {
-    <CreateLink />;
-  };
 
   const filteredUrls = urls?.filter((url) => {
     return (
