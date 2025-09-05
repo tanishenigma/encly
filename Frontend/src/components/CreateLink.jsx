@@ -99,6 +99,9 @@ const CreateLink = ({
               onChange={(e) => setCustom(e.target.value)}
             />
           </div>
+          <label className="text-sm text-slate-400">
+            Lynks can start with http or https
+          </label>
           <button
             className={`p-2 w-full rounded-full text-slate-50 ${
               title.trim().length > 0 && /^https?:\/\/.+/.test(link)
