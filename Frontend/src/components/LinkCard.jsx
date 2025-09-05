@@ -8,7 +8,7 @@ import QRCode from "react-qr-code";
 const LinkCard = ({ url, setUrls }) => {
   const copyToClipboard = async (text) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText("https://enc.ly/" + text);
       toast("Copied to clipboard Successfully!");
     } catch (err) {
       toast.error(`Failed to copy: ${err.message}`);
