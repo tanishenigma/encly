@@ -41,21 +41,21 @@ const CreateLink = ({
       <div
         className={
           create
-            ? `fixed mt-10 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100`
+            ? `fixed md:mt-10 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-8 md:p-15 md:py-25 shadow-xl transition-all duration-100`
             : ` -top-200 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100`
         }>
         <X
-          className="cursor-pointer absolute bottom-168 left-98"
+          className="cursor-pointer absolute bottom-125 left-80 md:bottom-175 md:left-98"
           onClick={() => {
             setCreate(!create);
           }}
           size={30}
         />
         <form
-          className="flex flex-col justify-center items-center gap-y-5 "
+          className="flex flex-col justify-center items-center gap-y-2 md:gap-y-5 "
           onSubmit={handleCreate}>
           <div>
-            <h1 className="text-5xl font-black "> Create Lynk</h1>
+            <h1 className="text-4xl md:text-5xl font-black "> Create Lynk</h1>
           </div>{" "}
           <div className="relative inline-block">
             <QRCode
@@ -90,7 +90,7 @@ const CreateLink = ({
             name="link"
             value={link}
           />
-          <div className="bg-primary/10 w-fit border-2 border-primary/10 p-2 rounded-xl o">
+          <div className="text-md bg-primary/10 w-fit border-2 border-primary/10 p-2 rounded-xl o">
             <span>Enc.ly/ </span>
             <input
               className="outline-none"

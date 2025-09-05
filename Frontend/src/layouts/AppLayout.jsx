@@ -70,7 +70,7 @@ const AppLayout = () => {
             }deg)`,
           }}></div>
       </main>
-      <footer className="flex flex-col justify-center items-center relative z-10 text-center p-10 md:border-hidden border-t-1 border-purple-400/20 text-slate-400 overflow-hidden">
+      <footer className="flex flex-col justify-center items-center relative z-10 text-center p-10 text-slate-400 overflow-hidden">
         <Link
           to="https://github.com/tanishenigma"
           target="blank"

@@ -74,7 +74,7 @@ const LinkPage = () => {
   return (
     <>
       {!create ? (
-        <div className="w-full">
+        <div className="md:w-full w-[90%]">
           <div className="flex w-full text-center md:text-left  justify-center gap-5 items-center mb-20">
             <div className="justify-center bg-primary/5 w-full text-xl md:text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-xl md:ml-0 ml-5">
               Lynks Created
@@ -88,7 +88,7 @@ const LinkPage = () => {
           </div>
           <div className="border-t-1 border-purple-400/20 ">
             <div className="flex justify-between py-10">
-              <h1 className="text-xl md:text-4xl lg:text-6xl font-bold">
+              <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold">
                 My Lynks
               </h1>
               <button
@@ -108,13 +108,13 @@ const LinkPage = () => {
                 }}
               />
               <Filter
-                className="absolute hover:scale-110 duration-300 cursor-pointer "
+                className="absolute z-200 hover:scale-110 duration-300 cursor-pointer "
                 onClick={() => {
                   setFilterLink((prev) => !prev);
                 }}
               />
               {filterLink && (
-                <div className="grid grid-cols-1 bg-primary/50 px-3 text-xl gap-y-2 absolute top-12 rounded-md backdrop-blur-xs shadow-xl shadow-black cursor-pointer py-2">
+                <div className="z-200  grid grid-cols-1 bg-primary/50 px-3 text-xl gap-y-2 absolute top-12 rounded-md backdrop-blur-xs shadow-xl shadow-black cursor-pointer py-2">
                   <div className="flex gap-x-2 flex-row items-center hover:bg-primary/40 p-2 rounded-md">
                     <AArrowUp />
                     <p className="" onClick={() => setSortBy("name")}>

@@ -49,9 +49,9 @@ const LinkCard = ({ url, setUrls }) => {
   return (
     <div
       key={url.id}
-      className="flex justify-between p-5 rounded-5xl border-b-2 border-primary/5 ">
+      className="flex justify-between p-2 md:p-5 rounded-5xl border-b-2 border-primary/5 ">
       {/* Grid with 4 columns: QR | Title | Short URL | Original URL + Copy */}
-      <div className="grid grid-cols-[200px_150px_1fr_auto] items-center gap-4 text-slate-50">
+      <div className="grid md:grid-cols-[200px_150px_1fr_auto]  md:place-items-start items-center gap-4 text-slate-50">
         {/* QR Code */}
         <div className="relative inline-block">
           <QRCode
@@ -66,7 +66,7 @@ const LinkCard = ({ url, setUrls }) => {
             style={{ borderRadius: "4px" }}
           />
 
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="opacity-0 md:opacity-100 absolute md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="w-12 h-12 rounded-full border-slate-50/5  border-2  flex items-center justify-center bg-slate-50">
               <LinkIcon className="shadow-lg shadow-black/30 w-10 h-10 p-2  text-[#1f1c33]" />
             </div>
@@ -109,21 +109,21 @@ const LinkCard = ({ url, setUrls }) => {
           </span>{" "}
         </div>
       </div>
-      <div className="">
+      <div className="flex flex-col md:flex-row items-start relative">
         <button
-          className="p-2 cursor-pointer hover:scale-110 duration-200 hover:text-blue-500"
+          className="p-2 md:top-5 md:right-0 absolute top-5 right-5 cursor-pointer hover:scale-110 duration-200 hover:text-blue-500"
           onClick={() => copyToClipboard(url.short_url)}>
           <Copy size={25} />
         </button>
         <button
-          className="p-2 cursor-pointer hover:scale-110 duration-200 hover:text-red-500"
+          className="p-2 md:top-15 md:right-0  absolute top-35 right-5  cursor-pointer hover:scale-110 duration-200 hover:text-red-500"
           onClick={() => {
             handleDelete(url.id);
           }}>
           {loading ? <LoaderCircle /> : <Trash size={25} />}
         </button>
         <button
-          className="p-2 cursor-pointer hover:scale-110 duration-200 hover:text-primary "
+          className="p-2 md:top-25 md:right-0 absolute top-20 right-5 cursor-pointer hover:scale-110 duration-200 hover:text-primary "
           title="Download QR Code"
           onClick={() => handleDownload()}>
           <Download size={25} />
