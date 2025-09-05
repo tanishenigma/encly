@@ -59,7 +59,7 @@ const CreateLink = ({
           </div>{" "}
           <div className="relative inline-block">
             <QRCode
-              value={link && link ? `https://enc.ly/${custom}` : link}
+              value={custom ? `https://enc.ly/${custom}` : link}
               size={200}
               fgColor="#2f1945"
               bgColor="#ffffff"
@@ -100,8 +100,15 @@ const CreateLink = ({
             />
           </div>
           <button
-            className="bg-primary p-2 w-full rounded-full cursor-pointer text-slate-50"
-            type="submit">
+            className={`p-2 w-full rounded-full text-slate-50 ${
+              title.trim().length > 0 && /^https?:\/\/.+/.test(link)
+                ? "bg-primary cursor-pointer"
+                : "bg-primary/50 cursor-not-allowed"
+            }`}
+            type="submit"
+            disabled={
+              !(title.trim().length > 0 && /^https?:\/\/.+/.test(link))
+            }>
             Encly
           </button>
         </form>
