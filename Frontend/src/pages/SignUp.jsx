@@ -22,6 +22,7 @@ import {
 import { toast } from "sonner";
 import * as Yup from "yup";
 import UserContext from "../contexts/UserContext";
+import { LinkIcon } from "lucide-react";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -86,20 +87,38 @@ const SignUp = () => {
       toast("ERROR: " + error.message);
     }
   };
-  const googleAuth = () => {
+  const googleAuth = async () => {
     try {
-      signInWithPopup(auth, provider);
+      await signInWithPopup(auth, provider);
       navigate("/");
     } catch (error) {
       toast("Error:" + error.message);
     }
   };
-
+  const [click, setClick] = useState(false);
   return (
-    <div className="mt-36 flex flex-col items-center gap-10">
-      <h1 className="text-8xl font-extrabold">Signup</h1>
+    <div className="md:mt-36 mt-5 flex flex-col items-center gap-10">
+      <h1 className="text-4xl md:text-6xl lg:text-8xl font-extrabold">
+        <div className="flex flex-col items-center">
+          <div
+            className={`md:hidden w-20 h-20 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 ${
+              click ? "bg-slate-950/30" : ""
+            }  m-5 `}>
+            <LinkIcon
+              className="w-15 h-15 p-2 absolute top-2 left-2 cursor-pointer "
+              onClick={() => {
+                setClick((prev) => !prev);
+                setTimeout(() => {
+                  navigate("/");
+                }, 100);
+              }}
+            />
+          </div>
+          Signup
+        </div>
+      </h1>
       <form onSubmit={handleSignUp}>
-        <Card className="w-full min-w-md">
+        <Card className="md:w-96 lg:w-full lg:min-w-md w-86 bg-slate-950/20 backdrop-blur-sm  ">
           <CardHeader>
             <CardTitle>Create a new account</CardTitle>
           </CardHeader>

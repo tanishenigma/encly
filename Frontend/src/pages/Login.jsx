@@ -18,9 +18,8 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LinkIcon } from "lucide-react";
 import * as Yup from "yup";
-import supabase from "../db/supabase";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,6 +28,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [click, setClick] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -115,32 +115,10 @@ const Login = () => {
       toast.error(errorMessage);
     }
   };
-
   const googleAuth = async () => {
     try {
-      const cred = await signInWithPopup(auth, provider);
-      navigate("/dashboard");
-
-      const idToken = await cred.user.getIdToken(true);
-
-      // Call backend bridge
-      const resp = await fetch("http://localhost:4000/auth/firebase", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      });
-
-      const { access_token, refresh_token, expires_in } = await resp.json();
-
-      // Set Supabase session
-      await supabase.auth.setSession({
-        access_token,
-        refresh_token,
-        expires_in,
-      });
-
-      console.log("✅ Supabase session ready (RLS enabled)");
-      toast("Supabase session ready (RLS enabled)");
+      await signInWithPopup(auth, provider);
+      navigate("/");
     } catch (error) {
       toast("Error:" + error.message);
     }
@@ -149,10 +127,28 @@ const Login = () => {
   return (
     <>
       {!showForgotPassword ? (
-        <div className="mt-36 flex flex-col items-center gap-10">
-          <h1 className="text-8xl font-extrabold">Login</h1>
+        <div className="md:mt-36 mt-5 flex flex-col items-center gap-10">
+          <h1 className="text-4xl md:text-6xl lg:text-8xl font-extrabold ">
+            <div className="flex flex-col items-center">
+              <div
+                className={`md:hidden w-20 h-20 rounded-full relative backdrop-blur-2xl border-slate-50/5 shadow-2xl shadow-black border-2 ${
+                  click ? "bg-slate-950/30" : ""
+                }  m-5 `}>
+                <LinkIcon
+                  className="w-15 h-15 p-2 absolute top-2 left-2 cursor-pointer "
+                  onClick={() => {
+                    setClick((prev) => !prev);
+                    setTimeout(() => {
+                      navigate("/");
+                    }, 100);
+                  }}
+                />
+              </div>
+              Login
+            </div>
+          </h1>
           <form onSubmit={handleLogin}>
-            <Card className="w-full min-w-md">
+            <Card className="md:w-96 lg:w-full lg:min-w-md w-86 bg-slate-950/20 backdrop-blur-sm ">
               <CardHeader>
                 <CardTitle>Login to your account</CardTitle>
               </CardHeader>
@@ -228,14 +224,16 @@ const Login = () => {
         <div className="mt-36 flex flex-col items-center gap-10">
           <button
             type="button"
-            className="absolute top-10 left-10 text-xl font-semibold flex cursor-pointer items-center gap-2  bg-[#9b8afb]/20 p-2 rounded-xl backdrop-blur-3xl"
+            className="absolute top-8 left-5 md:top-10 md:left-5 text-sm md:text-xl font-semibold flex cursor-pointer items-center gap-2  bg-[#9b8afb]/20 p-2 rounded-md backdrop-blur-3xl"
             onClick={() => setShowForgotPassword(false)}>
             <ArrowLeft /> Back to login
           </button>
 
-          <h1 className="text-8xl font-extrabold">Forgot?</h1>
+          <h1 className="text-4xl md:text-6xl lg:text-8xl font-extrabold">
+            Forgot?🤔
+          </h1>
           <form onSubmit={handleForgotPassword}>
-            <Card className="w-full min-w-md">
+            <Card className="md:w-full w-80 md:min-w-md  bg-slate-950/20 backdrop-blur-sm ">
               <CardHeader>
                 <CardTitle>Enter the Email Address</CardTitle>
               </CardHeader>
