@@ -41,8 +41,8 @@ const CreateLink = ({
       <div
         className={
           create
-            ? `fixed mt-10 bg-primary/10 backdrop-blur-sm flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 drop-shadow-2xl transition-all duration-100`
-            : ` -top-200 bg-primary/10 backdrop-blur-sm flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 drop-shadow-2xl transition-all duration-100`
+            ? `fixed mt-10 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100`
+            : ` -top-200 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100`
         }>
         <X
           className="cursor-pointer absolute bottom-168 left-98"
@@ -131,9 +131,9 @@ const CreateLink = ({
         </div>
         <div className="border-1 border-purple-400/20 ">
           <div className="">
-            <div className="flex justify-between py-15">
+            <div className="flex justify-between">
               <h1 className="text-6xl font-bold">My Links</h1>
-              <button className="bg-primary rounded-lg px-5">
+              <button className="bg-primary rounded-lg px-5 ">
                 Create Link
               </button>
             </div>
