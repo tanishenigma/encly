@@ -1,11 +1,12 @@
-import { Copy, Download, LinkIcon, Trash } from "lucide-react";
-import React from "react";
+import { Copy, Download, LinkIcon, LoaderCircle, Trash } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import supabase from "../db/supabase";
 import QRCode from "react-qr-code";
 
 const LinkCard = ({ url, setUrls }) => {
+  const [loading, setLoading] = useState(false);
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText("https://enc.ly/" + text);
@@ -16,11 +17,12 @@ const LinkCard = ({ url, setUrls }) => {
   };
 
   const handleDelete = async (id) => {
+    setLoading(true);
     const { error } = await supabase.from("urls").delete().eq("id", id);
     if (!error) {
       setUrls((prev) => prev.filter((u) => u.id !== url.id));
     }
-
+    setLoading(false);
     if (error) {
       toast.error("Failed to delete link: " + error.message);
     } else {
@@ -118,7 +120,7 @@ const LinkCard = ({ url, setUrls }) => {
           onClick={() => {
             handleDelete(url.id);
           }}>
-          <Trash size={25} />
+          {loading ? <LoaderCircle /> : <Trash size={25} />}
         </button>
         <button
           className="p-2 cursor-pointer hover:scale-110 duration-200 hover:text-primary "
