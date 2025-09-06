@@ -5,6 +5,7 @@ import useScrollToTop from "../hooks/useScrollToTop";
 
 const AppLayout = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -87,10 +88,10 @@ const AppLayout = () => {
           Encly
         </h1>
         <p className="drop-shadow-sm">
-          Copyright © 2025 <span className="font-bold">Encly</span>
+          Copyright © {currentYear} <span className="font-bold">Encly</span>
         </p>
         <p className="drop-shadow-sm">
-          Made by <span className="font-bold">TanishEnigma</span> with 🖱️ & ⌨️
+          Made by <span className="font-bold">TanishEnigma</span> with 🖱 and ⌨
         </p>
       </footer>
     </div>
