@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import supabase from "../db/supabase";
 import QRCode from "react-qr-code";
+import { useRef } from "react";
 
 const LinkCard = ({ url, setUrls }) => {
   const [loading, setLoading] = useState(false);
@@ -30,26 +31,75 @@ const LinkCard = ({ url, setUrls }) => {
     }
   };
 
-  const handleDownload = async () => {
-    try {
-      const imageUrl = url?.qr;
-      const fileName = url?.title;
-      const anchor = document.createElement("a");
-      anchor.href = imageUrl;
-      anchor.download = fileName;
+  const qrRef = useRef();
 
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-    } catch (error) {
-      toast.error("Failed to download QR: " + error.message);
+  /*SVG DOWNLOAD
+
+  const handleDownload = () => {
+    try {
+      const svg = qrRef.current.querySelector("svg");
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(svg);
+
+      const blob = new Blob([svgString], {
+        type: "image/svg+xml;charset=utf-8",
+      });
+      const urlBlob = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = urlBlob;
+      link.download = `${url?.title || "qr-code"}.svg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(urlBlob);
+    } catch (err) {
+      toast.error("Download Error: " + err.message);
+    }
+  };
+
+  */
+  const handleDownload = (title) => {
+    try {
+      const svg = qrRef.current.querySelector("svg");
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(svg);
+      const img = new Image();
+      const svgBlob = new Blob([svgString], {
+        type: "image/svg+xml;charset=utf-8",
+      });
+      const url = URL.createObjectURL(svgBlob);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 200;
+        canvas.height = 200;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const pngUrl = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = pngUrl;
+        link.download = `${title + " QR Code" || "QR Code"}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+      };
+
+      img.src = url;
+    } catch (err) {
+      toast.error("Download Error: " + err.message);
     }
   };
 
   return (
     <div
       key={url.id}
-      className="flex justify-between p-2 md:p-5 rounded-5xl border-b-2 border-primary/5 ">
+      className="flex justify-between p-2 md:p-5 rounded-5xl border-b-2 border-primary/5 "
+      ref={qrRef}>
       {/* Grid with 4 columns: QR | Title | Short URL | Original URL + Copy */}
       <div className="grid md:grid-cols-[200px_150px_1fr_auto]  md:place-items-start items-center gap-4 text-slate-50">
         {/* QR Code */}
@@ -125,7 +175,7 @@ const LinkCard = ({ url, setUrls }) => {
         <button
           className="p-2 md:top-25 md:right-0 absolute top-20 right-5 cursor-pointer hover:scale-110 duration-200 hover:text-primary "
           title="Download QR Code"
-          onClick={() => handleDownload()}>
+          onClick={() => handleDownload(url?.title)}>
           <Download size={25} />
         </button>
       </div>
