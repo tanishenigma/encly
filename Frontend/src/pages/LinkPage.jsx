@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import LinkCard from "../components/LinkCard";
 import CreateLink from "../components/CreateLink";
+import { useSearchParams } from "react-router-dom";
 
 const LinkPage = () => {
   const [urls, setUrls] = useState([]);
@@ -21,7 +22,14 @@ const LinkPage = () => {
   const [create, setCreate] = useState(false);
   const [sortBy, setSortBy] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const createNew = searchParams.get("createNew");
 
+  useEffect(() => {
+    if (createNew) {
+      setCreate(true);
+    }
+  }, [createNew]);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -164,6 +172,7 @@ const LinkPage = () => {
           setUrls={setUrls}
           urls={urls}
           clicks={clicks}
+          prefillLink={createNew}
         />
       )}
     </>

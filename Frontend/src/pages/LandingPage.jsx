@@ -15,7 +15,7 @@ const LandingPage = () => {
     e.preventDefault();
     if (!user) {
       if (longUrl) navigate(`auth?/createNew=${longUrl}`);
-    } else navigate("/link");
+    } else navigate(`/link?createNew=${encodeURIComponent(longUrl)}`);
   };
   return (
     <div className="flex flex-col ">

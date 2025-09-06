@@ -14,9 +14,10 @@ const CreateLink = ({
   setUrls,
   urls,
   clicks,
+  prefillLink,
 }) => {
   const [title, setTitle] = useState("");
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState(prefillLink || "");
   const [custom, setCustom] = useState("");
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -37,7 +38,9 @@ const CreateLink = ({
     }
   };
   return (
-    <div className="relative flex justify-center items-start w-full ">
+    <div
+      className="relative flex justify-center items-start w-full "
+      defaultOpen={link}>
       <div
         className={
           create
