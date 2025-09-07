@@ -41,3 +41,18 @@ export async function getUserUrls() {
 
   return data;
 }
+
+export async function getLongUrl(id) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("User Not Authenticated!");
+
+  const { data, error } = await supabase
+    .from("urls")
+    .select("id,original_url")
+    .or(`short_url.eq.${id},custom_url.eq${id}`)
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}

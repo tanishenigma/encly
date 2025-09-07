@@ -4,13 +4,7 @@ import { getClicks } from "../services/clickServices";
 import { getUserUrls } from "../services/urlService";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebase";
-import {
-  AArrowUp,
-  AlignHorizontalSpaceBetween,
-  Calendar,
-  Filter,
-  Pointer,
-} from "lucide-react";
+import { AArrowUp, Calendar, Filter, Pointer } from "lucide-react";
 import LinkCard from "../components/LinkCard";
 import CreateLink from "../components/CreateLink";
 import { useSearchParams } from "react-router-dom";
@@ -30,6 +24,7 @@ const LinkPage = () => {
       setCreate(true);
     }
   }, [createNew]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
