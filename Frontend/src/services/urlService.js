@@ -28,6 +28,7 @@ export async function createShortUrl({ originalUrl, customUrl, title, qr }) {
 
   return data;
 }
+
 export async function getUserUrls() {
   const user = auth.currentUser;
   if (!user) throw new Error("User Not Authenticated!");
@@ -38,7 +39,6 @@ export async function getUserUrls() {
     .eq("user_id", user.uid);
 
   if (error) throw error;
-
   return data;
 }
 
@@ -48,11 +48,10 @@ export async function getLongUrl(id) {
 
   const { data, error } = await supabase
     .from("urls")
-    .select("id,original_url")
-    .or(`short_url.eq.${id},custom_url.eq${id}`)
+    .select("id, original_url, title, description, links")
+    .or(`short_url.eq.${id},custom_url.eq.${id}`)
     .single();
 
   if (error) throw error;
-
   return data;
 }

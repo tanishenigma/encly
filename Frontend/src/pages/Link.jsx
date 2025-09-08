@@ -1,39 +1,39 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUserUrls } from "../services/urlService";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast } from "sonner";
 import { auth } from "../lib/firebase";
-import { getLongUrl, storeClicks } from "../services/clickServices";
+import { storeClicks } from "../services/clickServices";
+import { getUserUrls } from "../services/urlService";
 
 export default function Link() {
   const { id } = useParams();
-  const [getUrls, setUrls] = useState("");
-  const [clicks, setClicks] = useState(null);
+  const [pageData, setPageData] = useState(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const data = await getUserUrls();
-          setUrls(data);
-        } catch (error) {
-          toast.error("Failed to fetch URLs: " + error.message);
-        }
-      }
+          // Get all URLs for the user
+          const urls = await getUserUrls();
+          setPageData(urls.find((u) => u.id === id)); // store current URL's data
 
-      if (user) {
-        try {
-          const clickData = await storeClicks(id, getLongUrl);
-          await getLongUrl(id);
-          setClicks(clickData);
+          // Record click only
+          await storeClicks({ id });
         } catch (error) {
-          toast.error("Failed to fetch URLs: " + error.message);
+          toast.error("Failed to fetch data: " + error.message);
         }
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [id]);
+
+  if (!pageData) {
+    return (
+      <div className="flex items-center justify-center p-6">Loading...</div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center p-6">

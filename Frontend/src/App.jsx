@@ -5,7 +5,7 @@ import Auth from "./pages/Auth";
 import LandingPage from "./pages/LandingPage";
 import LinkPage from "./pages/LinkPage";
 import Dashboard from "./pages/Dashboard";
-import Redirect from "./pages/RedirectLink";
+import Redirect from "./pages/Redirect";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import ResetPassword from "./pages/ResetPassword";
