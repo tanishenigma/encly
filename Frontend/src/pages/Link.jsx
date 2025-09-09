@@ -9,12 +9,10 @@ import { getUserUrls } from "../services/urlService";
 export default function Link() {
   const { id } = useParams();
   const [pageData, setPageData] = useState(null);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          // Get all URLs for the user
           const urls = await getUserUrls();
           setPageData(urls.find((u) => u.id === id)); // store current URL's data
 
