@@ -58,7 +58,8 @@ const Header = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
-    localStorage.removeItem("profilePic"); // clear stored image on logout
+    localStorage.removeItem("profilePic");
+    setStoredPic(null);
     navigate("/");
   };
 
