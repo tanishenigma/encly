@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { auth } from "../lib/firebase";
 import { storeClicks, getClicksForUrl } from "../services/clickServices";
 import { getUserUrls } from "../services/urlService";
+import Loading from "../components/Loading";
 
 export default function Link() {
   const { id } = useParams();
@@ -39,7 +40,7 @@ export default function Link() {
   if (!pageData) {
     return (
       <div className="flex items-center justify-center p-6">
-        ❌ No data found for this link
+        <Loading />
       </div>
     );
   }
@@ -55,7 +56,7 @@ export default function Link() {
         href={pageData.original_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full max-w-sm p-4 my-2 text-center rounded-lg bg-pink-500 text-white font-semibold shadow-lg hover:bg-pink-600">
+        className="w-full max-w-sm p-4 my-2 text-center rounded-lg bg-primary text-slate-50 font-semibold shadow-lg hover:bg-primary/90">
         Go to site
       </a>
 
@@ -68,7 +69,7 @@ export default function Link() {
           <ul className="divide-y divide-gray-200">
             {clicks.map((click, idx) => (
               <li key={idx} className="py-2">
-                🌍 {click.city}, {click.country} • 📱 {click.device}
+                {click.city}, {click.country} • 📱 {click.device}
               </li>
             ))}
           </ul>
