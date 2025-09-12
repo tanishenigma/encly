@@ -47,7 +47,7 @@ export default function Link() {
 
   return (
     <div className="flex flex-col items-center p-6">
-      <h1 className="text-2xl font-bold mb-4">{pageData.title}</h1>
+      <h1 className="text-8xl font-bold mb-4">{pageData.title}</h1>
       <p className="mb-6 text-gray-500">
         Original URL: {pageData.original_url}
       </p>
@@ -60,18 +60,24 @@ export default function Link() {
         Go to site
       </a>
 
-      <div className="mt-8 w-full max-w-lg">
+      <div className="mt-8 w-full ">
         <h2 className="text-xl font-semibold mb-2">Click Stats</h2>
         {clicks.length === 0 ? (
           <p className="text-gray-500">No clicks yet.</p>
         ) : (
-          <ul className="divide-y divide-gray-200">
+          <div className="bg-primary/20 rounded-md p-5">
             {clicks.map((click, idx) => (
-              <li key={idx} className="py-2">
-                {click.city}, {click.country} • {click.device}
-              </li>
+              <p key={idx} className="py-2">
+                <div className="flex ">
+                  <div className="flex">
+                    City - {click.city}
+                    Country - {click.country}
+                    Device - {click.device}
+                  </div>
+                </div>
+              </p>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>
