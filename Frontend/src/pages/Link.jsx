@@ -60,7 +60,6 @@ export default function Link() {
         Go to site
       </a>
 
-      {/* 3️⃣ Show clicks info */}
       <div className="mt-8 w-full max-w-lg">
         <h2 className="text-xl font-semibold mb-2">Click Stats</h2>
         {clicks.length === 0 ? (
