@@ -46,8 +46,6 @@ export async function storeClicks({ id, originalUrl }) {
       country,
       device,
     });
-
-    window.location.href = originalUrl;
   } catch (error) {
     console.error("Error recording click:", error);
   }
