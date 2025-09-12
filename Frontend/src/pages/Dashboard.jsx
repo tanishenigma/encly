@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const { profilePic } = useContext(UserContext);
+
   const currentuser = auth.currentUser;
 
   const handleUpload = async () => {

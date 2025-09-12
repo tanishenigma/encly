@@ -36,8 +36,9 @@ export async function storeClicks({ id, originalUrl }) {
     const res = parser.getResult();
     const device = res.type || "desktop";
 
-    const response = await fetch("https://ipapi.co/json");
-    const { city, country_name: country } = await response.json();
+    const response = await fetch("https://ipinfo.io/json?token=fb1c37b543d2e1");
+    const data = await response.json();
+    const { city, country } = data;
 
     await supabase.from("clicks").insert({
       url_id: id,
