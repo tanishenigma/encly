@@ -68,7 +68,7 @@ export default function Link() {
           <ul className="divide-y divide-gray-200">
             {clicks.map((click, idx) => (
               <li key={idx} className="py-2">
-                {click.city}, {click.country} • 📱 {click.device}
+                {click.city}, {click.country} • {click.device}
               </li>
             ))}
           </ul>
