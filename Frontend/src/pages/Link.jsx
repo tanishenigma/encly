@@ -70,7 +70,7 @@ export default function Link() {
               <p key={idx} className="py-2">
                 <div className="flex ">
                   <div className="flex">
-                    City - {click.city}
+                    City : {click.city}
                     Country - {click.country}
                     Device - {click.device}
                   </div>
