@@ -167,7 +167,7 @@ const CreateLink = ({
                     </div>
                   </div>
                 ) : (
-                  <p className="text-slate-400 font-light"> No Links Yet</p>
+                  <p className="text-slate-400 font-light"> No Links Yet.</p>
                 )}
               </div>
             </div>
