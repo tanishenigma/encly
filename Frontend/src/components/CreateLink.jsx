@@ -5,7 +5,6 @@ import { createShortUrl } from "../services/urlService";
 import { toast } from "sonner";
 import { LinkIcon } from "lucide-react";
 import QRCode from "react-qr-code";
-
 const CreateLink = ({
   create,
   setCreate,
@@ -37,15 +36,23 @@ const CreateLink = ({
       toast.error(error.message || "Failed to create short URL");
     }
   };
+  // Check if document is defined (prevents SSR errors)
+  if (typeof document === "undefined") return null;
+
+  // Create portal to document.body
   return (
     <div
       className="relative flex justify-center items-start w-full "
-      defaultOpen={link}>
+      onClick={() => {
+        setCreate(!create);
+        console.log("clicked");
+      }}>
       <div
+        onClick={(e) => e.stopPropagation()}
         className={
           create
             ? `fixed md:mt-10 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-8 md:p-15 md:py-25 shadow-xl transition-all duration-100`
-            : ` -top-200 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100`
+            : ` -top-200 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100 `
         }>
         <X
           className="cursor-pointer absolute bottom-125 left-80 md:bottom-175 md:left-98"

@@ -77,7 +77,11 @@ const LinkPage = () => {
   return (
     <>
       {!create ? (
-        <div className="md:w-full w-[90%]">
+        <div
+          className="md:w-full w-[90%]"
+          onClick={(setCreate) => {
+            setCreate(!create);
+          }}>
           <div className="flex w-full text-center md:text-left  justify-center gap-5 items-center mb-20">
             <div className="justify-center bg-primary/5 w-full text-xl md:text-2xl font-semibold  text-slate-50 rounded-xl p-10 h-50 border-2 border-primary/20 backdrop-blur-xl md:ml-0 ml-5">
               Lynks Created
