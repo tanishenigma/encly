@@ -1,15 +1,14 @@
 import React, { useContext, useState } from "react";
-import { ID, Permission, Role } from "appwrite";
-import { storage } from "../lib/appwrite";
-import { doc, setDoc } from "firebase/firestore";
-import { db, auth } from "../lib/firebase";
+import { auth } from "../lib/firebase";
 import { toast } from "sonner";
 import UserContext from "../contexts/UserContext";
+import { updateUserProfile } from "../services/userService";
+import { LoaderCircle } from "lucide-react";
 
 const Dashboard = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const { profilePic } = useContext(UserContext);
+  const { profilePic, setProfilePic } = useContext(UserContext);
 
   const currentuser = auth.currentUser;
 
@@ -18,22 +17,20 @@ const Dashboard = () => {
     setUploading(true);
 
     try {
-      const response = await storage.createFile(
-        import.meta.env.VITE_APPWRITE_STORAGE_BUCKET,
-        ID.unique(),
-        file,
-        [Permission.read(Role.any())]
-      );
-      await setDoc(
-        doc(db, "users", currentuser.uid),
-        {
-          profilePicFileId: response.$id,
-        },
-        { merge: true }
-      );
-      setUploading(false);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = async () => {
+        const base64data = reader.result;
+        await updateUserProfile({ profile_picture: base64data });
+        setProfilePic(base64data);
+        toast.success("Profile picture updated successfully!");
+        setUploading(false);
+        setFile(null);
+      };
     } catch (error) {
-      toast.error(`Upload failed: ${error.message}`);
+      console.error(error);
+      toast.error("Failed to upload profile picture");
+      setUploading(false);
     }
   };
 
@@ -75,6 +72,19 @@ const Dashboard = () => {
     file:text-sm
     file:hover:bg-primary"
             />
+            <button
+              onClick={handleUpload}
+              disabled={uploading}
+              className="mt-4 bg-primary text-white px-6 py-2 rounded-full font-semibold hover:bg-primary/80 disabled:opacity-50 flex items-center gap-2">
+              {uploading ? (
+                <>
+                  <LoaderCircle className="animate-spin" size={20} />{" "}
+                  Uploading...
+                </>
+              ) : (
+                "Upload"
+              )}
+            </button>
 
             {/* Save button */}
             <button

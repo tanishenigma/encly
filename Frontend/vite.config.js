@@ -12,6 +12,10 @@ export default defineConfig({
     },
   },
   server: {
+    host: "0.0.0.0",
+    proxy: {
+      "/api": "http://192.168.1.6:5000",
+    },
     allowedHosts: [
       "77f468a5d410.ngrok-free.app", // 👈 add your ngrok domain here
     ],
