@@ -10,7 +10,9 @@ api.interceptors.request.use(async (config) => {
   const user = auth.currentUser;
   if (user) {
     const token = await user.getIdToken();
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.set("Authorization", `Bearer ${token}`);
+  } else {
+    console.warn("API Request made without authenticated user");
   }
   return config;
 });
