@@ -45,7 +45,6 @@ const CreateLink = ({
       className="relative flex justify-center items-start w-full "
       onClick={() => {
         setCreate(!create);
-        console.log("clicked");
       }}>
       <div
         onClick={(e) => e.stopPropagation()}
@@ -55,7 +54,7 @@ const CreateLink = ({
             : ` -top-200 bg-primary/10 backdrop-blur-xl flex flex-col items-center gap-y-5 z-200 rounded-xl p-15 py-25 shadow-xl transition-all duration-100 `
         }>
         <X
-          className="cursor-pointer absolute bottom-125 left-80 md:bottom-175 md:left-98"
+          className="cursor-pointer absolute bottom-125 left-80 md:bottom-175 md:left-85"
           onClick={() => {
             setCreate(!create);
           }}

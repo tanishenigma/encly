@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { auth, provider } from "../lib/firebase";
+import { auth, provider, signInWithGoogle } from "../lib/firebase";
 import {
   createUserWithEmailAndPassword,
   signOut,
@@ -89,7 +89,7 @@ const SignUp = () => {
   };
   const googleAuth = async () => {
     try {
-      await signInWithPopup(auth, provider);
+      await signInWithGoogle();
       navigate("/");
     } catch (error) {
       toast("Error:" + error.message);

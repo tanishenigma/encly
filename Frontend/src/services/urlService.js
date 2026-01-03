@@ -1,57 +1,44 @@
-import supabase from "../db/supabase";
-import { auth } from "../lib/firebase";
+import api from "../api/api";
 
 export async function createShortUrl({ originalUrl, customUrl, title, qr }) {
-  const user = auth.currentUser;
-  if (!user) throw new Error("User Not Authenticated!");
-
-  const shortUrl = customUrl || Math.random().toString(36).substring(2, 8);
-
-  const { data, error } = await supabase
-    .from("urls")
-    .insert([
-      {
-        original_url: originalUrl,
-        short_url: shortUrl,
-        custom_url: customUrl || null,
-        user_id: user.uid,
-        title: title ?? null,
-        qr: qr ?? null,
-      },
-    ])
-    .select()
-    .single();
-
-  if (error) {
-    throw new Error(error.message || "Failed to create short URL");
+  try {
+    const response = await api.post("/urls", {
+      originalUrl,
+      customUrl,
+      title,
+      qr,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Failed to create short URL"
+    );
   }
-
-  return data;
 }
 
 export async function getUserUrls() {
-  const user = auth.currentUser;
-  if (!user) throw new Error("User Not Authenticated!");
-
-  const { data, error } = await supabase
-    .from("urls")
-    .select("*")
-    .eq("user_id", user.uid);
-
-  if (error) throw error;
-  return data;
+  try {
+    const response = await api.get("/urls");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getLongUrl(id) {
-  const user = auth.currentUser;
-  if (!user) throw new Error("User Not Authenticated!");
+  try {
+    const response = await api.get(`/urls/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
-  const { data, error } = await supabase
-    .from("urls")
-    .select("id, original_url, title, description, links")
-    .or(`short_url.eq.${id},custom_url.eq.${id}`)
-    .single();
-
-  if (error) throw error;
-  return data;
+export async function deleteUrl(id) {
+  try {
+    const response = await api.delete(`/urls/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
